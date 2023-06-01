@@ -1,5 +1,7 @@
 'use strict';
 
+require("dotenv").config();
+
 const { getConnection } = require("./mysql-connection.js");
 
 const DATABASE_NAME = "collaborative-website";
@@ -37,5 +39,5 @@ const initDB = async () =>{
             FOREIGN KEY (idUser) REFERENCES user (id)
         )
     )`);
-    
+
 };
