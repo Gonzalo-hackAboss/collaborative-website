@@ -1,8 +1,1 @@
-/*
-Prueba de juan
-
-*/
-
-/* 
-prueba 2
-*/
+"use strict";
