@@ -20,16 +20,16 @@ const initDB = async () =>{
             name VARCHAR(50) NOT NULL,
             email VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(50) NOT NULL,
-            birthday VARCHAR(50) NOT NULL,
+            birthday CHAR(8) NOT NULL,
             acceptedTOS BOOL NOT NULL,
-            biography VARCHAR(300),
+            biography CHAR(300),
             avatarURL VARCHAR(300),
             country VARCHAR(150),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )`);
+        )`);
     await pool.query(`
-        CREATE TABLE POSTS(
+        CREATE TABLE Posts(
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(50) NOT NULL,
             description VARCHAR(150) NOT NULL,
@@ -37,8 +37,43 @@ const initDB = async () =>{
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (idUser) REFERENCES Users (id)
-        )
-    )`);
+        )`);
+    await pool.query(`
+        CREATE TABLE Tems(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category VARCHAR(50) NOT NULL,
+            description VARCHAR(50) NOT NULL,
+        )`)
+    await pool.query(`
+        CREATE TABLE PostImages(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            imageURL VARCHAR(300),
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+        )`)
+    await pool.query(`
+        CREATE TABLE Validation(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code CHAR(8) NOT NULL,
+            limitTime
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+        )`)
+    await pool.query(`
+        CREATE TABLE PostComments(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            comments TEXT,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+        )`)
+    await pool.query(`
+        CREATE TABLE Votes(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            votes BOOL NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+        )`)
 };
 
 initDB(); 
