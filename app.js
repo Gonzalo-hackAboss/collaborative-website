@@ -7,7 +7,13 @@ const path = require("path");
 const createPost = require("./post/createPost.js");
 const addPhoto = require("./post/addPhoto.js");
 const editPost = require("./post/editPost.js");
-const removePost = require("./post/deletePost.js");
+const deletePost = require("./post/deletePost.js");
+const deletephoto = require("./post/deletePhoto.js");
+const addComment = require("./post/addComment.js");
+const editComment = require("./post/editComment.js");
+const createCommentsFile = require("./post/editComment.js");
+
+
 
 
 const title = 'first post';

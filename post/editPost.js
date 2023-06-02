@@ -1,6 +1,6 @@
 'use strict'
 
-'use strict';
+
 
 function httpPost(url, data) {
   return fetch(url, {
