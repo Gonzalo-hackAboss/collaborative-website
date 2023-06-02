@@ -6,12 +6,12 @@ let pool = null;
 module.exports = {
 getConnection() {
     if (!pool) {
-    const { localhost, webcolaborativa, proyectodos } = process.env;
+    const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD } = process.env;
     pool = mysql2.createPool({
         connectionLimit: 10,
-        host: localhost,
-        user: webcolaborativa,
-        password: proyectodos,
+        host: MYSQL_HOST,
+        user: MYSQL_USER,
+        password: MYSQL_PASSWORD,
     });
     }
     return pool;
