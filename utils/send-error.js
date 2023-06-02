@@ -1,10 +1,10 @@
 /**
  * Gestión de Errores inesperados
  * Recibe el status o el error 500
- * ** El Error 500 hace referencia a INTERNAL SERVER ERROR (Error interno)
+ * ** El Error 500 hace referencia a INTERNAL SERVER ERROR (Error)
  */
 
-module.exports = (res, err) => {
+module.exports = (err, res) => {
     res.status(err.status ?? 500).json({
         success: false,
         error: {
