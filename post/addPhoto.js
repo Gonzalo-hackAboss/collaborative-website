@@ -3,16 +3,13 @@
 const fs = require('fs');
 const path = require('path');
 
-
 function saveImage(imageFile, postId) {
   return new Promise((resolve, reject) => {
     const tempPath = imageFile.path;
     const ext = path.extname(imageFile.originalname).toLowerCase();
     const targetPath = path.join(__dirname, 'postImages', `${postId}${ext}`);
 
-    
     if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif') {
-      
       fs.rename(tempPath, targetPath, (err) => {
         if (err) {
           reject(new Error('Error al guardar la imagen en el servidor.'));
@@ -21,7 +18,6 @@ function saveImage(imageFile, postId) {
         }
       });
     } else {
-      
       fs.unlink(tempPath, (err) => {
         if (err) {
           console.error('Error al eliminar el archivo temporal:', err);
@@ -32,12 +28,11 @@ function saveImage(imageFile, postId) {
   });
 }
 
-
 function saveImageInfo(postId, imageURL) {
   const imageInfo = {
-    id: generateHash(), 
+    id: generateHash(),
     idPost: postId,
-    imageURL: imageURL
+    imageURL: imageURL,
   };
 
   fs.readFile('postImagesInfo.json', 'utf8', (err, data) => {
@@ -63,10 +58,9 @@ function saveImageInfo(postId, imageURL) {
   });
 }
 
-
 const imageFile = {
   path: 'path/to/temp/image.png',
-  originalname: 'image.png'
+  originalname: 'image.png',
 };
 const postId = 'abc123';
 
@@ -81,7 +75,7 @@ saveImage(imageFile, postId)
 
 module.exports = {
   saveImage,
-  saveImageInfo
+  saveImageInfo,
 };
 
 

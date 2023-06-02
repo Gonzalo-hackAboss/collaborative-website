@@ -1,12 +1,43 @@
+const { getConnection } = require("../database/mysql-connection");
+const { searchError } = require("../services/error-service");
+
+const db = getConnection();
+
+/*
 module.exports = async ({ search }) => {
     const posts = dbService.searchByCategory(search);
     return posts;
 };
+*/
+
+module.exports = {
+    async searchByCategory(searchTerm, categoryNameArray) {
+        try {
+            const likeTerm = `%${searchTerm}%`;
+            let statement = `
+            SELECT * FROM categorias
+            WHERE ?
+            `;
+
+            for (let i = 0; i < categoryNameArray.length; i++) {
+                statement += "OR c.name = ?";
+            }
+
+            await db.execute(statement, categoryNameArray);
+            const [rows, fields] = await db.execute(
+                statement,
+                categoryNameArray
+            );
+            return rows;
+        } catch (err) {
+            searchError(err);
+        }
+    },
+};
 
 /*
-
-en el dbService.js
-async seachByCategory(searchTerm) {
+module.exports =
+async (seachByCategory(searchTerm) {
     const likeTerm = `%${searchTerm}%`
     const statement = `
     SELECT * FROM category
@@ -16,9 +47,7 @@ async seachByCategory(searchTerm) {
     `
     const row = await db.execute(statement, [likeTerm, likeTerm])
     return row;
-};
-
-
+});
 OTRO EJEMPLO
 SQL
 post -> category_post <- category
