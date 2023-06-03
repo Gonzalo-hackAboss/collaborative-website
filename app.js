@@ -12,6 +12,7 @@ const addComment = require('./post/addComment.js');
 const editComment = require('./post/editComment.js');
 const createCommentsFile = require('./post/createCommentsFile.js');
 //const getComments = require('./post/getComments.js');
+const router = require("./src/database/routes/app-router.js");
 
 const title = 'first post';
 const description = 'bla bla bla';
