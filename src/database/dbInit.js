@@ -2,7 +2,7 @@
 
 require("dotenv").config();
 
-const { getConnection } = require("./mysql-connection.js");
+const { getConnection } = require("./mysqlConnection.js");
 
 const DATABASE_NAME = "collaborative-website";
 

@@ -4,12 +4,13 @@
  * ** El Error 500 hace referencia a INTERNAL SERVER ERROR (Error)
  */
 
-module.exports = (err, res) => {
-    res.status(err.status ?? 500).json({
+module.exports = (res, error) => {
+    console.log(res);
+    res.status(error.status ?? 500).json({
         success: false,
         error: {
-            code: err.code ?? "UNEXPECTED_ERROR",
-            msg: err.message ?? "¡Ha ocurrido un error inesperado!",
+            code: error.code ?? "UNEXPECTED_ERROR",
+            msg: error.message ?? "¡Ha ocurrido un error inesperado!",
         },
     });
 };

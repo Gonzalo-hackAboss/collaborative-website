@@ -2,8 +2,8 @@
 const { Router } = require("express");
 
 // Se le agregan las rutas
-const usersRouter = require("./users-router.js");
-const postsRouter = require("./posts-router.js");
+const usersRouter = require("./usersRouter.js");
+const postsRouter = require("./postsRouter.js");
 
 // Se crea el enrutador para gestionar las rutas especificadas
 const router = Router();
