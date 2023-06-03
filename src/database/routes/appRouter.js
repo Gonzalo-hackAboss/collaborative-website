@@ -5,6 +5,7 @@ const { Router } = require("express");
 //const usersRouter = require("./users-router.js");
 //const postsRouter = require("./posts-router.js");
 
+
 // Se crea el enrutador para gestionar las rutas especificadas
 const router = Router();
 
