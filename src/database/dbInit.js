@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 require("dotenv").config();
 
 const cryptoService = require("../database/services/crypto/service.js");
-const {getConnection} = require("./mysqlConnection.js");
+const { getConnection } = require("./mysqlConnection");
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
-const initDB = async () =>{
+const initDB = async () => {
     const pool = getConnection();
     //BORRO LA BASE DE DATOS SI EXISTE
     await pool.query(`DROP DATABASE IF EXISTS ${DATABASE_NAME}`);
@@ -20,7 +20,7 @@ const initDB = async () =>{
     await insertModUsers(pool);
     await pool.end();
 };
-    async function createDataBaseTables(pool){
+async function createDataBaseTables(pool) {
     await pool.query(`
         CREATE TABLE Users(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +35,7 @@ const initDB = async () =>{
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`);
-        //CREO LA TABLA DE POST
+    //CREO LA TABLA DE POST
     await pool.query(`
         CREATE TABLE Posts(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -46,29 +46,29 @@ const initDB = async () =>{
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (idUser) REFERENCES Users (id)
         )`);
-        //CREO LA TABLA DE TEMAS
+    //CREO LA TABLA DE TEMAS
     await pool.query(`
         CREATE TABLE Tems(
             id INT AUTO_INCREMENT PRIMARY KEY,
             category VARCHAR(50) NOT NULL,
             description VARCHAR(50) NOT NULL,
-        )`)
-        //CREO LA TABLA DE POST IMAGENES
+        )`);
+    //CREO LA TABLA DE POST IMAGENES
     await pool.query(`
         CREATE TABLE PostImages(
             id INT AUTO_INCREMENT PRIMARY KEY,
             imageURL VARCHAR(300),
             FOREIGN KEY (idPost) REFERENCES Posts (id)
-        )`)
-        //CREO LA TABLA DE VALIDACIONES
+        )`);
+    //CREO LA TABLA DE VALIDACIONES
     await pool.query(`
         CREATE TABLE Validation(
             id INT AUTO_INCREMENT PRIMARY KEY,
             code CHAR(8) NOT NULL,
-            limitTime
+            limitTime, // aquí he agregado la coma
             FOREIGN KEY (idUser) REFERENCES Users (id)
-        )`)
-        //CREO LA TABLA DE POST DE LOS COMENTARIOS
+        )`);
+    //CREO LA TABLA DE POST DE LOS COMENTARIOS
     await pool.query(`
         CREATE TABLE PostComments(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -77,8 +77,8 @@ const initDB = async () =>{
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (idPost) REFERENCES Posts (id)
             FOREIGN KEY (idUser) REFERENCES Users (id)
-        )`)
-        //CREO LA TABLA DE VOTOS
+        )`);
+    //CREO LA TABLA DE VOTOS
     await pool.query(`
         CREATE TABLE Votes(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,13 +86,13 @@ const initDB = async () =>{
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (idUser) REFERENCES Users (id)
             FOREIGN KEY (idPost) REFERENCES Posts (id)
-        )`)
-};
+        )`);
+}
 
 async function insertAdminUsers(pool) {
     await pool.execute(
         `
-        INSERT INTO users(id,name,email,password,birthDate,acceptedTOS,admin) 
+        INSERT INTO Users(id,name,email,password,birthDate,acceptedTOS,admin) 
         VALUES(?,?,?,?,?,?,?)  
         `,
         [
@@ -111,7 +111,7 @@ async function insertAdminUsers(pool) {
 async function insertModUsers(pool) {
     await pool.execute(
         `
-        INSERT INTO users(id,name,email,password,birthDate,acceptedTOS,mod) 
+        INSERT INTO Users(id,name,email,password,birthDate,acceptedTOS,mod) 
         VALUES(?,?,?,?,?,?,?)  
         `,
         [
@@ -127,8 +127,7 @@ async function insertModUsers(pool) {
     );
 }
 
-
-for(const user of user) {
+for (const user of user) {
     await pool.execute(
         `
         INSERT INTO users(id,nameMember,email,password,birthDate,acceptedTOS,biography,avatar,country) 
@@ -148,7 +147,7 @@ for(const user of user) {
     );
 }
 
-for(const post of posts) {
+for (const post of posts) {
     await pool.execute(
         `
         INSERT INTO posts(id,title,description,userId,category)
@@ -157,55 +156,60 @@ for(const post of posts) {
         [post.id, post.title, post.description, post.userId, post.category]
     );
 
-for(const tem of tems) {
-    await pool.execute(
-        `
+    for (const tem of tems) {
+        await pool.execute(
+            `
         INSERT INTO tems(id,category,description)
         VALUES(?,?,?)
         `,
-        [tem.id, tem.category, tem.description]
-    );
-}
+            [tem.id, tem.category, tem.description]
+        );
+    }
 
-for(const postImagen of postImagens) {
-    await pool.execute(
-        `
+    for (const postImagen of postImagens) {
+        await pool.execute(
+            `
         INSERT INTO postImagens(id,PostId,image)
         VALUES(?,?,?)
         `,
-        [postImagen.id, postImagen.postId, postImagen.image]
-    );
-}
+            [postImagen.id, postImagen.postId, postImagen.image]
+        );
+    }
 
-for(const validation of validation) {
-    await pool.execute(
-        `
+    for (const validation of validation) {
+        await pool.execute(
+            `
         Insert INTO validation(UserId,code,limitTime)
         Values(?,?,?)
         `,
-        [validation.userId, validation.code, validation.limitTime]
-    );
-}
+            [validation.userId, validation.code, validation.limitTime]
+        );
+    }
 
-for(const postComments of postComments) {
-    await pool.execute(
-        `
+    for (const postComments of postComments) {
+        await pool.execute(
+            `
         Insert INTO validation(id,postId,userId,comment)
         Values(?,?,?,?)
         `,
-        [postComments.id, postComments.postId, postComments.userId, postComments.comment]
-    );
-}
+            [
+                postComments.id,
+                postComments.postId,
+                postComments.userId,
+                postComments.comment,
+            ]
+        );
+    }
 
-for(const votes of votes) {
-    await pool.execute(
-        `
+    for (const votes of votes) {
+        await pool.execute(
+            `
         Insert INTO validation(id,vote,userId,postId)
         Values(?,?,?,?)
         `,
-        [votes.id, votes.vote, votes.userId, votes.postId]
-    );
-}
+            [votes.id, votes.vote, votes.userId, votes.postId]
+        );
+    }
 }
 
 initDB();
