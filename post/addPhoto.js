@@ -1,81 +1,20 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const { generateUUID } = require("../src/database/services/cryptoServices");
+const dbService = require("../src/database/services/dbService.js");
+const fileService = require("../src/database/services/fileServices.js");
 
-function saveImage(imageFile, postId) {
-  return new Promise((resolve, reject) => {
-    const tempPath = imageFile.path;
-    const ext = path.extname(imageFile.originalname).toLowerCase();
-    const targetPath = path.join(__dirname, 'postImages', `${postId}${ext}`);
+module.exports = async (postId, userId, photo) => {
+  const id = generateUUID();
 
-    if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif') {
-      fs.rename(tempPath, targetPath, (err) => {
-        if (err) {
-          reject(new Error('Error al guardar la imagen en el servidor.'));
-        } else {
-          resolve(targetPath);
-        }
-      });
-    } else {
-      fs.unlink(tempPath, (err) => {
-        if (err) {
-          console.error('Error al eliminar el archivo temporal:', err);
-        }
-        reject(new Error('Extensión de archivo no válida. Se permiten archivos PNG, JPG, JPEG o GIF.'));
-      });
-    }
-  });
-}
+  const url = await fileService.processUploadedPostPhoto(postId, id, photo);
 
-function saveImageInfo(postId, imageURL) {
-  const imageInfo = {
-    id: generateHash(),
-    idPost: postId,
-    imageURL: imageURL,
+  const photoData = {
+    id: id,
+    imageURL: url,
+    postId: postId,
   };
 
-  fs.readFile('postImagesInfo.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error al leer el archivo postImagesInfo.json:', err);
-      return;
-    }
-
-    let imagesInfo = [];
-    if (data) {
-      imagesInfo = JSON.parse(data);
-    }
-
-    imagesInfo.push(imageInfo);
-
-    fs.writeFile('postImagesInfo.json', JSON.stringify(imagesInfo), 'utf8', (err) => {
-      if (err) {
-        console.error('Error al guardar la información de la imagen:', err);
-      } else {
-        console.log('Información de la imagen guardada correctamente.');
-      }
-    });
-  });
-}
-
-const imageFile = {
-  path: 'path/to/temp/image.png',
-  originalname: 'image.png',
+  await dbService.savePhoto(photoData);
 };
-const postId = 'abc123';
-
-saveImage(imageFile, postId)
-  .then((imagePath) => {
-    console.log('Imagen guardada:', imagePath);
-    saveImageInfo(postId, imagePath);
-  })
-  .catch((error) => {
-    console.error('Error al guardar la imagen:', error.message);
-  });
-
-module.exports = {
-  saveImage,
-  saveImageInfo,
-};
-
 
