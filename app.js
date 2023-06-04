@@ -3,13 +3,9 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const createPost = require("./post/createPost.js");
-const addPhoto = require("./post/addPhoto.js");
+
+
 //const deletePost = require("./post/deletePost.js");
-const deletePhoto = require("./post/deletePhoto.js");
-const addComment = require("./post/addComment.js");
-const editComment = require("./post/editComment.js");
-const createCommentsFile = require("./post/createCommentsFile.js");
 //const getComments = require('./post/getComments.js');
 const router = require("./src/database/routes/appRouter.js");
 const sendError = require("./utils/sendError.js");
