@@ -33,6 +33,9 @@ app.use((err, req, res, next) => {
       message: `Endpoint desconocido: ${req.method} ${req.path}`,
     });
   });
+  
+
+  
 /* Error 404 */
 
 //app.use((req, res, next) => {
