@@ -3,6 +3,7 @@
 const { generateUUID } = require("../src/database/services/cryptoServices");
 const dbService = require("../src/database/services/dbService.js");
 const fileService = require("../src/database/services/fileServices.js");
+const errorService = require("../src/database/services/errorService.js");
 
 module.exports = async (postId, userId, photo) => {
   const id = generateUUID();
