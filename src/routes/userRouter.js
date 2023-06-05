@@ -1,9 +1,11 @@
 "use strict";
 const { Router } = require("express");
+const { json } = require("express");
+
 const registerUser = require("../user/registerUser.js");
 const loginUser = require("../user/loginUser.js");
-const sendResponse = require("../utils/sendResponse.js");
-// const authGuard = require("../middlewares/authGuard.js");
+const sendResponse = require("../../utils/sendResponse.js");
+const authGuard = require("../../middlewares/authGuard.js");
 
 const router = Router();
 
@@ -41,12 +43,5 @@ router.patch("/users/:id", json(), (req, res) => {
     res.json(req.body);
 });
 
- juan
+
 module.exports = router;
-=======
- ana
-module.exports = router;
-=======
-module.exports = router;
- main
- main

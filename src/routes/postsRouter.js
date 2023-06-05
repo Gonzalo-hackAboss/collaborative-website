@@ -1,34 +1,16 @@
 const { Router, json } = require("express");
 const fileUpload = require("express-fileupload");
 
- juan
-=======
- ana
- main
 const addComment = require("../../post/addComment.js");
 const addPhoto = require("../../post/addPhoto.js");
-const editComment = require("../post/createCommentFile.js");
 const createPost = require("../../post/createPost.js");
 const deleteComment = require("../../post/deleteComment.js");
 const deletePhoto = require("../../post/deletePhoto.js");
 const deletePost = require("../../post/deletePost.js");
 const editComment = require("../../post/editComment.js");
 const editPost = require("../../post/editPost.js");
- juan
-=======
-=======
-const addComment = require("../../../post/addComment.js");
-const addPhoto = require("../../../post/addPhoto.js");
-const editComment = require("../../post/createCommentFile.js");
-const createPost = require("../../../post/createPost.js");
-const deleteComment = require("../../../post/deleteComment.js");
-const deletePhoto = require("../../../post/re./../../post/deletePhoto.js");
-const deletePost = require("../../../post/deletePost.js");
-const editComment = require("../../../post/editComment.js");
-const editPost = require("../../../post/editPost.js");
- main
- main
 const handleAsyncError = require("../services/handleAsyncError.js");
+const authGuard = require("../../middlewares/authGuard.js");
 
 /* Preparación de futuras rutas requeridas */
 // const listPosts = require(".../../../post/list-posts.js");
@@ -74,26 +56,26 @@ router.get(
  ****    POST    ****
  */
 
-router.post(
-    "/posts",
-    authGuard,
-    json(),
-    handleAsyncError(async (req, res) => {
-        // Crear un nuevo post
-        await createPost(req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201); // revisar el envío de respuesta
-    })
-);
+    router.post(
+        "/posts",
+        authGuard,
+        json(),
+        handleAsyncError(async (req, res) => {
+            // Crear un nuevo post
+            await createPost(req.currentUser.id, req.body);
+            sendResponse(res, undefined, 201); // revisar el envío de respuesta
+        })
+    );
 
-router.post(
-    "/posts/:id/like",
-    authGuard,
-    handleAsyncError(async (req, res) => {
-        //Hacer toggle del like en el post con id req.params.id
-        await toggleLike(req.params.id, req.currentUser.id);
-        sendResponse(res);
-    })
-);
+//router.post(
+ //   "/posts/:id/like",
+ //   authGuard,
+  //  handleAsyncError(async (req, res) => {
+ //       //Hacer toggle del like en el post con id req.params.id
+ //       await toggleLike(req.params.id, req.currentUser.id);
+  //      sendResponse(res);
+ //   })
+//);
 
 router.post(
     "/posts/:id/comments",
