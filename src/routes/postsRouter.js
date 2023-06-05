@@ -12,13 +12,6 @@ const editPost = require("../../post/editPost.js");
 const handleAsyncError = require("../services/handleAsyncError.js");
 const authGuard = require("../../middlewares/authGuard.js");
 
-/* Preparación de futuras rutas requeridas */
-// const listPosts = require(".../../../post/list-posts.js");
-// const viewPostDetail = require("../../../post/view-post-detail.js");
-// const sendResponse = require(".emove-comment.js");
-// const authGuard = require("../../../post/auth-guard.js");
-// const searchPosts = require("../../../post/search-posts.js");
-
 const router = Router();
 
 /*
@@ -56,25 +49,25 @@ router.get(
  ****    POST    ****
  */
 
-    router.post(
-        "/posts",
-        authGuard,
-        json(),
-        handleAsyncError(async (req, res) => {
-            // Crear un nuevo post
-            await createPost(req.currentUser.id, req.body);
-            sendResponse(res, undefined, 201); // revisar el envío de respuesta
-        })
-    );
+router.post(
+    "/posts",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        // Crear un nuevo post
+        await createPost(req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201); // revisar el envío de respuesta
+    })
+);
 
 //router.post(
- //   "/posts/:id/like",
- //   authGuard,
-  //  handleAsyncError(async (req, res) => {
- //       //Hacer toggle del like en el post con id req.params.id
- //       await toggleLike(req.params.id, req.currentUser.id);
-  //      sendResponse(res);
- //   })
+//   "/posts/:id/like",
+//   authGuard,
+//  handleAsyncError(async (req, res) => {
+//       //Hacer toggle del like en el post con id req.params.id
+//       await toggleLike(req.params.id, req.currentUser.id);
+//      sendResponse(res);
+//   })
 //);
 
 router.post(
@@ -104,4 +97,4 @@ router.post(
 //     })
 // );
 
-// module.exports = router;
+module.exports = router;
