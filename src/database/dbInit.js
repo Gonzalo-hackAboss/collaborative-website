@@ -3,7 +3,11 @@
 require("dotenv").config();
 
 //const cryptoService = require("");
+ ana
 const { getConnection } = require("./mysqlConnection.js");
+=======
+const {getConnection} = require("./mysqlConnection.js");
+ main
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
