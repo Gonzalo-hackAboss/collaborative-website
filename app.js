@@ -4,16 +4,11 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
-
 //const deletePost = require("./post/deletePost.js");
 //const getComments = require('./post/getComments.js');
 const router = require("./src/database/routes/appRouter.js");
 const sendError = require("./utils/sendError.js");
-const notFound = require("./middlewares/notFound.js");
-
-
-
-
+const notFound = require("./src/services/errorServices.js");
 
 const app = express();
 const PORT = 3000;
