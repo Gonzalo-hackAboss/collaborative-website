@@ -1,5 +1,10 @@
 'use strict';
 
+ juan
+const dbService = require("../src/services/dbService.js");
+const fileService = require("../src/services/fileServices.js");
+const errorService = require("../src/services/errorService.js");
+=======
  ana
 const dbService = require("../src/services/dbService.js");
 const fileService = require("../src/services/fileServices.js");
@@ -8,6 +13,7 @@ const errorService = require("../src/services/errorService.js");
 const dbService = require("../src/database/services/dbService.js");
 const fileService = require("../src/database/services/fileServices.js");
 const errorService = require("../src/database/services/errorService.js");
+ main
  main
 
 function confirm(condition, message) {

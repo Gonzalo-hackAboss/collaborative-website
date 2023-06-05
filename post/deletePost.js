@@ -1,3 +1,6 @@
+ juan
+"use strict";
+=======
  ana
 "use strict";
 
@@ -13,19 +16,23 @@ module.exports = async (postId, userId) => {
 };
 =======
 'use strict';
+ main
 
-const errorService = require("../services/error-service.js");
-const { getPostById, deletePost } = require("../src/database/services/dbService.js");
+//const errorService = require("../services/error-service.js");
+const { getPostById, deletePost } = require("../src/services/dbService.js");
 
 module.exports = async (postId, userId) => {
-  if ((await getPostById(postId)).userId != userId) {
-    return errorService.unauthorizedUser();
-  }
+    if ((await getPostById(postId)).userId != userId) {
+        return errorService.unauthorizedUser();
+    }
 
-  await deletePost(postId);
+    await deletePost(postId);
 };
+ juan
+=======
 
 
 
 
+ main
  main

@@ -1,10 +1,15 @@
 "use strict";
 
+ juan
+=======
  ana
+ main
 const { generateUUID } = require("../src/services/cryptoServices");
 const dbService = require("../src/services/dbService.js");
 const fileService = require("../src/services/fileServices.js");
 const errorService = require("../src/services/errorService.js");
+ juan
+=======
 
 module.exports = async (postId, userId, photo) => {
     const id = generateUUID();
@@ -24,19 +29,23 @@ const { generateUUID } = require("../src/database/services/cryptoServices");
 const dbService = require("../src/database/services/dbService.js");
 const fileService = require("../src/database/services/fileServices.js");
 const errorService = require("../src/database/services/errorService.js");
+ main
 
 module.exports = async (postId, userId, photo) => {
-  const id = generateUUID();
+    const id = generateUUID();
 
-  const url = await fileService.processUploadedPostPhoto(postId, id, photo);
+    const url = await fileService.processUploadedPostPhoto(postId, id, photo);
 
-  const photoData = {
-    id: id,
-    imageURL: url,
-    postId: postId,
-  };
+    const photoData = {
+        id: id,
+        imageURL: url,
+        postId: postId,
+    };
 
-  await dbService.savePhoto(photoData);
+    await dbService.savePhoto(photoData);
 };
+ juan
+=======
 
+ main
  main
