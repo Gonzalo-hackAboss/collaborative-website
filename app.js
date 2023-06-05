@@ -6,9 +6,13 @@ const path = require("path");
 
 //const deletePost = require("./post/deletePost.js");
 //const getComments = require('./post/getComments.js');
-const router = require("./src/database/routes/appRouter.js");
+const router = require("./src/routes/appRouter.js");
 const sendError = require("./utils/sendError.js");
+ ana
+const notFound = require("./src/services/errorService.js");
+=======
 const notFound = require("./src/services/errorServices.js");
+ main
 
 const app = express();
 const PORT = 3000;
