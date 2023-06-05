@@ -1,6 +1,6 @@
 "use strict";
-const cryptoServices = require("../src/database/services/cryptoServices.js");
-const dbServices = require("../src/database/services/dbService.js");
+const cryptoServices = require("../services/cryptoServices.js");
+const dbServices = require("../services/dbService.js");
 const emailServices = require("../services/emailService.js");
 const timeServices = require("../services/timeService.js");
 
