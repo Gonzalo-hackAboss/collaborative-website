@@ -1,6 +1,10 @@
 const { Router, json } = require("express");
 const fileUpload = require("express-fileupload");
 
+ juan
+=======
+ ana
+ main
 const addComment = require("../../post/addComment.js");
 const addPhoto = require("../../post/addPhoto.js");
 const editComment = require("../post/createCommentFile.js");
@@ -10,6 +14,20 @@ const deletePhoto = require("../../post/deletePhoto.js");
 const deletePost = require("../../post/deletePost.js");
 const editComment = require("../../post/editComment.js");
 const editPost = require("../../post/editPost.js");
+ juan
+=======
+=======
+const addComment = require("../../../post/addComment.js");
+const addPhoto = require("../../../post/addPhoto.js");
+const editComment = require("../../post/createCommentFile.js");
+const createPost = require("../../../post/createPost.js");
+const deleteComment = require("../../../post/deleteComment.js");
+const deletePhoto = require("../../../post/re./../../post/deletePhoto.js");
+const deletePost = require("../../../post/deletePost.js");
+const editComment = require("../../../post/editComment.js");
+const editPost = require("../../../post/editPost.js");
+ main
+ main
 const handleAsyncError = require("../services/handleAsyncError.js");
 
 /* Preparación de futuras rutas requeridas */

@@ -3,7 +3,15 @@
 require("dotenv").config();
 
 //const cryptoService = require("");
+ juan
 const { getConnection } = require("./mysqlConnection.js");
+=======
+ ana
+const { getConnection } = require("./mysqlConnection.js");
+=======
+const {getConnection} = require("./mysqlConnection.js");
+ main
+ main
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
@@ -24,6 +32,7 @@ const initDB = async () => {
 };
 async function createDataBaseTables(pool) {
     await pool.query(`
+ juan
     CREATE TABLE IF NOT EXISTS Users(
         id CHAR(36) PRIMARY KEY,
         nameMember VARCHAR(50) NOT NULL,
@@ -116,6 +125,89 @@ CREATE TABLE IF NOT EXISTS Votes(
 	FOREIGN KEY (idUser) REFERENCES Users (id),
 	FOREIGN KEY (idPost) REFERENCES Posts (id)
 );`);
+=======
+        CREATE TABLE Users(
+            id CHAR(36) PRIMARY KEY,
+            nameMember VARCHAR(50) NOT NULL,
+            email VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(50) NOT NULL,
+            birthday CHAR(8) NOT NULL,
+            acceptedTOS BOOL NOT NULL,
+            biography CHAR(300),
+            avatarURL VARCHAR(300),
+            country VARCHAR(150),
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`);
+    //CREO LA TABLA DE POST
+    await pool.query(`
+        CREATE TABLE Posts(
+            id CHAR(36) PRIMARY KEY,
+            title VARCHAR(50) NOT NULL,
+            description VARCHAR(150) NOT NULL,
+            category VARCHAR(50) NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+        );`);
+    //CREO LA TABLA DE TEMAS
+    await pool.query(`
+        CREATE TABLE categories(
+            id CHAR(36) PRIMARY KEY,
+            category VARCHAR(50) NOT NULL,
+            description VARCHAR(50) NOT NULL
+        );`);
+    // CREAMOS TABLA DE CATEGORIAS Y POSTS PARA BUSCADOR
+    await pool.query(`
+    CREATE TABLE categoriesPosts(
+        id CHAR(36) PRIMARY KEY,
+        idPost CHAR(36) NOT NULL,
+        idCategory CHAR(36) NOT NULL,
+        FOREIGN KEY (idPost) REFERENCES Posts (id),
+        FOREIGN KEY (idCategory) REFERENCES categories (id)
+    );
+    `);
+
+    //CREO LA TABLA DE POST IMAGENES
+    await pool.query(`
+        CREATE TABLE PostImages(
+            id CHAR(36) PRIMARY KEY,
+            idPost CHAR(36) NOT NULL,
+            imageURL VARCHAR(300),
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+        );`);
+
+    //CREO LA TABLA DE VALIDACIONES
+    await pool.query(`
+        CREATE TABLE Validation(
+            id CHAR(36) PRIMARY KEY,
+            code CHAR(8) NOT NULL,
+            limitTime VARCHAR(36) NOT NULL,
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+        );`);
+    // ¿Debe ser Null el limitTime?
+
+    //CREO LA TABLA DE POST DE LOS COMENTARIOS
+    await pool.query(`
+        CREATE TABLE PostComments(
+            id CHAR(36) PRIMARY KEY,
+            comments TEXT NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+        )`);
+    //CREO LA TABLA DE VOTOS
+    await pool.query(`
+        CREATE TABLE Votes(
+            id CHAR(36) PRIMARY KEY,
+            votes BOOL NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (idUser) REFERENCES Users (id)
+            FOREIGN KEY (idPost) REFERENCES Posts (id)
+        )`);
+ main
 }
 
 async function insertAdminUsers(pool) {
