@@ -47,7 +47,6 @@ module.exports = loginUser;
 /*
 const cryptoServices = require("../src/database/services/cryptoServices.js");
 const dbServices = require("../src/database/services/dbServices.js");
-
 module.exports = async ({ email, plainPassword }) => {
     //obtengo el usuario que corresponda a ese email.
     const user = await dbServices.getUserByEmailUNSAFE(email);

@@ -1,51 +1,13 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
+const dbService = require("../src/services/dbService.js");
 
-function deleteComment(commentId) {
-  return new Promise((resolve, reject) => {
-    fs.readFile('comments.json', 'utf8', (err, data) => {
-      if (err) {
-        reject(new Error('Error al leer los comentarios.'));
-        return;
-      }
+module.exports = async (commentId, userId) => {
+    const comment = await dbService.getCommentById(commentId);
 
-      let comments = [];
-      if (data) {
-        comments = JSON.parse(data);
-      }
+    if (comment.userId !== userId) {
+        throw new Error("Usuario no autorizado");
+    }
 
-      
-      const commentIndex = comments.findIndex(c => c.commentId === commentId);
-
-      if (commentIndex !== -1) {
-        
-        comments.splice(commentIndex, 1);
-
-       
-        fs.writeFile('comments.json', JSON.stringify(comments), 'utf8', (err) => {
-          if (err) {
-            reject(new Error('Error al eliminar el comentario.'));
-          } else {
-            resolve('Comentario eliminado correctamente.');
-          }
-        });
-      } else {
-        reject(new Error('No se encontró el comentario especificado.'));
-      }
-    });
-  });
-}
-
-
-const commentId = 'abc123';
-
-deleteComment(commentId)
-  .then((message) => {
-    console.log(message);
-  })
-  .catch((error) => {
-    console.error('Error al eliminar el comentario:', error.message);
-  });
-
-module.exports = deleteComment;
+    await dbService.deleteComment(commentId);
+};

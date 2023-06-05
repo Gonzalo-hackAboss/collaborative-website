@@ -2,8 +2,8 @@
 
 require("dotenv").config();
 
-const cryptoService = require("../database/services/crypto/service.js");
-const { getConnection } = require("./mysqlConnection");
+//const cryptoService = require("");
+const { getConnection } = require("./mysqlConnection.js");
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
@@ -23,7 +23,7 @@ const initDB = async () => {
 async function createDataBaseTables(pool) {
     await pool.query(`
         CREATE TABLE Users(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
             nameMember VARCHAR(50) NOT NULL,
             email VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(50) NOT NULL,
@@ -34,45 +34,61 @@ async function createDataBaseTables(pool) {
             country VARCHAR(150),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )`);
+        );`);
     //CREO LA TABLA DE POST
     await pool.query(`
         CREATE TABLE Posts(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
             title VARCHAR(50) NOT NULL,
             description VARCHAR(150) NOT NULL,
             category VARCHAR(50) NOT NULL,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (idUser) REFERENCES Users (id)
-        )`);
+        );`);
     //CREO LA TABLA DE TEMAS
     await pool.query(`
-        CREATE TABLE Tems(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+        CREATE TABLE categories(
+            id CHAR(36) PRIMARY KEY,
             category VARCHAR(50) NOT NULL,
-            description VARCHAR(50) NOT NULL,
-        )`);
+            description VARCHAR(50) NOT NULL
+        );`);
+    // CREAMOS TABLA DE CATEGORIAS Y POSTS PARA BUSCADOR
+    await pool.query(`
+    CREATE TABLE categoriesPosts(
+        id CHAR(36) PRIMARY KEY,
+        idPost CHAR(36) NOT NULL,
+        idCategory CHAR(36) NOT NULL,
+        FOREIGN KEY (idPost) REFERENCES Posts (id),
+        FOREIGN KEY (idCategory) REFERENCES categories (id)
+    );
+    `);
+
     //CREO LA TABLA DE POST IMAGENES
     await pool.query(`
         CREATE TABLE PostImages(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
+            idPost CHAR(36) NOT NULL,
             imageURL VARCHAR(300),
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (idPost) REFERENCES Posts (id)
-        )`);
+        );`);
+
     //CREO LA TABLA DE VALIDACIONES
     await pool.query(`
         CREATE TABLE Validation(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
             code CHAR(8) NOT NULL,
-            limitTime, // aquí he agregado la coma
+            limitTime VARCHAR(36) NOT NULL,
             FOREIGN KEY (idUser) REFERENCES Users (id)
-        )`);
+        );`);
+    // ¿Debe ser Null el limitTime?
+
     //CREO LA TABLA DE POST DE LOS COMENTARIOS
     await pool.query(`
         CREATE TABLE PostComments(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            comments TEXT,
+            id CHAR(36) PRIMARY KEY,
+            comments TEXT NOT NULL,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (idPost) REFERENCES Posts (id)
@@ -81,7 +97,7 @@ async function createDataBaseTables(pool) {
     //CREO LA TABLA DE VOTOS
     await pool.query(`
         CREATE TABLE Votes(
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id CHAR(36) PRIMARY KEY,
             votes BOOL NOT NULL,
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (idUser) REFERENCES Users (id)
@@ -92,7 +108,7 @@ async function createDataBaseTables(pool) {
 async function insertAdminUsers(pool) {
     await pool.execute(
         `
-        INSERT INTO Users(id,name,email,password,birthDate,acceptedTOS,admin) 
+        INSERT INTO users(id,name,email,password,birthDate,acceptedTOS,admin) 
         VALUES(?,?,?,?,?,?,?)  
         `,
         [
@@ -111,7 +127,7 @@ async function insertAdminUsers(pool) {
 async function insertModUsers(pool) {
     await pool.execute(
         `
-        INSERT INTO Users(id,name,email,password,birthDate,acceptedTOS,mod) 
+        INSERT INTO users(id,name,email,password,birthDate,acceptedTOS,mod) 
         VALUES(?,?,?,?,?,?,?)  
         `,
         [

@@ -1,15 +1,15 @@
 const { Router, json } = require("express");
 const fileUpload = require("express-fileupload");
 
-const addComment = require("../../../post/addComment.js");
-const addPhoto = require("../../../post/addPhoto.js");
-const editComment = require("../../post/createCommentFile.js");
-const createPost = require("../../../post/createPost.js");
-const deleteComment = require("../../../post/deleteComment.js");
-const deletePhoto = require("../../../post/re./../../post/deletePhoto.js");
-const deletePost = require("../../../post/deletePost.js");
-const editComment = require("../../../post/editComment.js");
-const editPost = require("../../../post/editPost.js");
+const addComment = require("../../post/addComment.js");
+const addPhoto = require("../../post/addPhoto.js");
+const editComment = require("../post/createCommentFile.js");
+const createPost = require("../../post/createPost.js");
+const deleteComment = require("../../post/deleteComment.js");
+const deletePhoto = require("../../post/deletePhoto.js");
+const deletePost = require("../../post/deletePost.js");
+const editComment = require("../../post/editComment.js");
+const editPost = require("../../post/editPost.js");
 const handleAsyncError = require("../services/handleAsyncError.js");
 
 /* Preparación de futuras rutas requeridas */

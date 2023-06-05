@@ -4,7 +4,6 @@
  * [AsyncFunction: loginUser]
 Error: Access denied for user ''@'localhost' (using password: YES)
 Completed running './user/test-loginUser.js'
-
 revisando .env y conex, db
  */
 require("dotenv").config();

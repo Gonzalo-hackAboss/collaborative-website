@@ -1,29 +1,23 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const dbService = require("../src/services/dbService.js");
+const fileService = require("../src/services/fileServices.js");
+const errorService = require("../src/services/errorService.js");
 
-function deletephoto(imagePath) {
-  return new Promise((resolve, reject) => {
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        reject(new Error('Error al eliminar la imagen.'));
-      } else {
-        resolve('Imagen eliminada correctamente.');
-      }
-    });
-  });
+function confirm(condition, message) {
+  if (!condition) {
+    throw new Error(message);
+  }
 }
+module.exports = async (postId, photoId, userId) => {
+  const post = await dbService.getPostById(postId);
+  confirm(post, "Post not found");
+  confirm(post.userId === userId, "Unauthorized user");
 
+  const photo = await dbService.getPhotoById(photoId);
+  confirm(photo, "Photo not found");
+  confirm(photo.postId === postId, "Invalid photo");
 
-const imagePath = '';
-
-deletephoto(imagePath)
-  .then((message) => {
-    console.log(message);
-  })
-  .catch((error) => {
-    console.error('Error al eliminar la imagen:', error.message);
-  });
-
-module.exports = deletephoto;
+  await dbService.deletePhoto(photoId);
+  await fileService.deletePhoto(photo);
+};
