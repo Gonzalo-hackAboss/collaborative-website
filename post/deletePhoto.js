@@ -2,6 +2,7 @@
 
 const dbService = require("../src/database/services/dbService.js");
 const fileService = require("../src/database/services/fileServices.js");
+const errorService = require("../src/database/services/errorService.js");
 
 function confirm(condition, message) {
   if (!condition) {
