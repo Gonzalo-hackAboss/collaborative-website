@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const cryptoService = require("../src/services/cryptoServices.js");
+const validateToken = require("./tokenValidator.js");
+const sendError = require("../utils/sendError.js");
 
 module.exports =
     // Exportar esto:
@@ -14,8 +16,7 @@ module.exports =
 
 // Llevar este código donde se tenga que ejecutar.
 
-const validateToken = require("./tokenValidator.js");
-const sendError = require("../utils/sendError.js");
+
 
 const token = "..."; // El token que deseas validar
 const secretKey = "..."; // Llamar al .env con la CLAVE SECRETA del token

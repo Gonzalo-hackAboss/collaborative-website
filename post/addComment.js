@@ -5,6 +5,7 @@ const {
     checkUserPermission,
     saveComment,
 } = require("../src/services/dbService.js");
+const errorService = require("../src/services/errorService.js");
 
 module.exports = async (postId, currentUserId, commentPayload) => {
     const hasPermission = await checkUserPermission(postId, currentUserId);

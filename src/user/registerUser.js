@@ -3,6 +3,7 @@ const cryptoServices = require("../services/cryptoServices.js");
 const dbServices = require("../services/dbService.js");
 const emailServices = require("../services/emailService.js");
 const timeServices = require("../services/timeService.js");
+const errorService = require("../services/errorService.js");
 
 module.exports = async (userData) => {
     if (!userData.acceptTOS) {
