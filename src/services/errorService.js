@@ -1,47 +1,47 @@
 "use strict";
 
-
 module.exports = {
     invalidCredentials: () => {
-      const error = new Error("Invalid credentials");
-      error.status = 400;
-      error.code = "INVALID_CREDENTIALS";
-      throw error;
+        const error = new Error("Invalid credentials");
+        error.status = 400;
+        error.code = "INVALID_CREDENTIALS";
+        throw error;
     },
 
     emailNotValidated: () => {
-      const error = new Error("Email has not been validated");
-      error.status = 400;
-      error.code = "EMAIL_NOT_VALIDATED";
-      throw error;
+        const error = new Error("Email has not been validated");
+        error.status = 400;
+        error.code = "EMAIL_NOT_VALIDATED";
+        throw error;
     },
 
     didNotAcceptTOS: () => {
-        const error = new Error("The user must accept the terms and conditions to register");
+        const error = new Error(
+            "The user must accept the terms and conditions to register"
+        );
         error.status = 400;
         error.code = "DID_NOT_ACCEPT_TOS";
         throw error;
-      },
+    },
 
     notAuthenticated: () => {
-      const error = new Error("You must send a token");
-      error.status = 401;
-      error.code = "NOT_AUTHENTICATED";
-      throw error;
+        const error = new Error("You must send a token");
+        error.status = 401;
+        error.code = "NOT_AUTHENTICATED";
+        throw error;
     },
-    
+
     unauthorizedUser: () => {
-      const error = new Error("The user is not authorized");
-      error.status = 403;
-      error.code = "UNAUTHORIZED";
-      throw error;
+        const error = new Error("The user is not authorized");
+        error.status = 403;
+        error.code = "UNAUTHORIZED";
+        throw error;
     },
-    
+
     notFound: () => {
-      const error = new Error("The requested resource does not exist");
-      error.status = 404;
-      error.code = "RESOURCE_NOT_FOUND";
-      throw error;
+        const error = new Error("The requested resource does not exist");
+        error.status = 404;
+        error.code = "RESOURCE_NOT_FOUND";
+        throw error;
     },
-  };
-  
+};
