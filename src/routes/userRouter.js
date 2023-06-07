@@ -1,9 +1,11 @@
 "use strict";
 const { Router } = require("express");
+const { json } = require("express");
+
 const registerUser = require("../user/registerUser.js");
 const loginUser = require("../user/loginUser.js");
-const sendResponse = require("../utils/sendResponse.js");
-// const authGuard = require("../middlewares/authGuard.js");
+const sendResponse = require("../../utils/sendResponse.js");
+const authGuard = require("../../middlewares/authGuard.js");
 
 const router = Router();
 
@@ -40,5 +42,6 @@ router.patch("/users/:id", json(), (req, res) => {
     // Modificar datos del usuario (solo para el propio usuario, o para el admin)
     res.json(req.body);
 });
+
 
 module.exports = router;

@@ -1,6 +1,6 @@
 'use strict'
 
-const {getConnection} = require("../mysqlConnection.js");
+const {getConnection} = require("../database/mysqlConnection.js");
 
 module.exports = {
     async saveUser(user) {

@@ -1,6 +1,8 @@
 "use strict";
 
-//const errorService = require("../services/error-service.js");
+
+
+const errorService = require("../src/services/errorService.js");
 const { getPostById, deletePost } = require("../src/services/dbService.js");
 
 module.exports = async (postId, userId) => {
@@ -10,3 +12,4 @@ module.exports = async (postId, userId) => {
 
     await deletePost(postId);
 };
+

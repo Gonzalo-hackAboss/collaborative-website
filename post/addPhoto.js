@@ -1,4 +1,3 @@
-"use strict";
 
 const { generateUUID } = require("../src/services/cryptoServices");
 const dbService = require("../src/services/dbService.js");

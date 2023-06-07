@@ -1,14 +1,14 @@
-// Se exporta enrutador de express
+'use strict';
+
 const { Router } = require("express");
 
-// Se le agregan las rutas
 
-// const usersRouter = require("./usersRouter.js");
-// const postsRouter = require("./postsRouter.js");
+const postsRouter = require("../routes/postsRouter.js");
+const userRouter = require("../routes/userRouter.js");
 
-// // Se crea el enrutador para gestionar las rutas especificadas
-// const router = Router();
-// router.use(usersRouter);
-// router.use(postsRouter);
 
-// module.exports = router;
+const router = Router();
+router.use(userRouter);
+router.use(postsRouter);
+
+module.exports = router;
