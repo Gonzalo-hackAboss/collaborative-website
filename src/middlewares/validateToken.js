@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const cryptoService = require("../src/services/cryptoServices.js");
+const cryptoService = require("../../services/cryptoServices.js");
 const validateToken = require("./tokenValidator.js");
 const sendError = require("../utils/sendError.js");
 
@@ -25,6 +25,5 @@ const decodedToken = validateToken(token, secretKey);
 
 if ((decodedToken = null)) {
     // El token no es válido
-    console.log("Token inválido");
     sendError();
 }

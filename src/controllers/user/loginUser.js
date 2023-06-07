@@ -2,10 +2,10 @@
 /**
  * pendiente confirmar si funciona
  */
-const { getConnection } = require("../database/mysqlConnection.js");
-const cryptoServices = require("../services/cryptoServices.js");
+const { getConnection } = require("../../database/mysqlConnection.js");
+const cryptoServices = require("../../services/cryptoServices.js");
 const jwt = require("jsonwebtoken");
-const timeService = require("../services/timeService.js");
+const timeService = require("../../services/timeService.js");
 async function loginUser(email, password) {
     const pool = getConnection();
 

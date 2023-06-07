@@ -1,7 +1,7 @@
 "use strict";
 
-const dbService = require("../src/services/dbService.js");
-const errorService = require("../src/services/errorService.js");
+const dbService = require("../../services/dbService.js");
+const errorService = require("../../services/errorService.js");
 module.exports = async (commentId, userId) => {
     const comment = await dbService.getCommentById(commentId);
 
