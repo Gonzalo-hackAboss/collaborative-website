@@ -5,8 +5,6 @@ require("dotenv").config();
 const hashpassword = require("../services/cryptoServices.js");
 const { getConnection } = require("./mysqlConnection.js");
 
-
-
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
 const initDB = async () => {
@@ -28,7 +26,6 @@ const initDB = async () => {
 };
 async function createDataBaseTables(pool) {
     await pool.query(`
- juan
     CREATE TABLE IF NOT EXISTS Users(
         id CHAR(36) PRIMARY KEY,
         nameMember VARCHAR(50) NOT NULL,
@@ -122,5 +119,4 @@ CREATE TABLE IF NOT EXISTS Votes(
 	FOREIGN KEY (idUser) REFERENCES Users (id),
 	FOREIGN KEY (idPost) REFERENCES Posts (id)
 );`);
-
-};     
+}
