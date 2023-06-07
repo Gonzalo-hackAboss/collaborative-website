@@ -11,4 +11,5 @@ const dbService = require("../src/database/services/dbService.js");
     });
 
     console.log(result);
+    console.log(await dbService.getAllUsers());
 })();
