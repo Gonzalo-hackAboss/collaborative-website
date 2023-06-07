@@ -2,7 +2,7 @@ const { Router, json } = require("express");
 const fileUpload = require("express-fileupload");
 
 const addComment = require("../../post/addComment.js");
-const addPhoto = require("../../post/addPhoto.js");
+// const addPhoto = require("../../post/addPhoto.js");
 const createPost = require("../../post/createPost.js");
 const deleteComment = require("../../post/deleteComment.js");
 const deletePhoto = require("../../post/deletePhoto.js");
@@ -11,20 +11,26 @@ const editComment = require("../../post/editComment.js");
 const editPost = require("../../post/editPost.js");
 const handleAsyncError = require("../services/handleAsyncError.js");
 const authGuard = require("../../middlewares/authGuard.js");
+const sendResponse = require("../../utils/sendResponse.js");
 
 const router = Router();
 
 /*
  ****    GET     ****
  */
-router.get(
-    "/posts",
-    handleAsyncError(async (req, res) => {
-        //Obtener todos los posts
-        const posts = await listPosts();
-        sendResponse(res, posts);
-    })
-);
+// router.get(
+//     "/posts",
+//     handleAsyncError(async (req, res) => {
+//         //Obtener todos los posts
+//         const posts = await listPosts();
+//         sendResponse(res, posts);
+//     })
+// );
+
+router.get("/posts", (req, res) => {
+    console.log("hola");
+    sendResponse();
+});
 
 router.get(
     "/posts/:id",
@@ -35,16 +41,6 @@ router.get(
     })
 );
 
-/* Acceder al Buscador, revisar cómo implementarlo */
-// router.get(
-//     "/posts/search",
-//     handleAsyncError(async (req, res) => {
-//         //Obtener todos los posts
-//         const posts = await searchPosts(req.query);
-//         sendResponse(res, posts);
-//     })
-// );
-
 /*
  ****    POST    ****
  */
@@ -54,21 +50,12 @@ router.post(
     authGuard,
     json(),
     handleAsyncError(async (req, res) => {
-        // Crear un nuevo post
-        await createPost(req.currentUser.id, req.body);
+        console.log("hola"),
+            // Crear un nuevo post
+            await createPost(req.currentUser.id, req.body);
         sendResponse(res, undefined, 201); // revisar el envío de respuesta
     })
 );
-
-//router.post(
-//   "/posts/:id/like",
-//   authGuard,
-//  handleAsyncError(async (req, res) => {
-//       //Hacer toggle del like en el post con id req.params.id
-//       await toggleLike(req.params.id, req.currentUser.id);
-//      sendResponse(res);
-//   })
-//);
 
 router.post(
     "/posts/:id/comments",
@@ -80,6 +67,28 @@ router.post(
         sendResponse(res, undefined, 201);
     })
 );
+
+module.exports = router;
+
+/* Acceder al Buscador, revisar cómo implementarlo */
+// router.get(
+//     "/posts/search",
+//     handleAsyncError(async (req, res) => {
+//         //Obtener todos los posts
+//         const posts = await searchPosts(req.query);
+//         sendResponse(res, posts);
+//     })
+// );
+
+//router.post(
+//   "/posts/:id/like",
+//   authGuard,
+//  handleAsyncError(async (req, res) => {
+//       //Hacer toggle del like en el post con id req.params.id
+//       await toggleLike(req.params.id, req.currentUser.id);
+//      sendResponse(res);
+//   })
+//);
 
 /*
  *** ESPERANDO A IMPLEMENTAR LAS FOTOS PARA PROBARLO
@@ -96,5 +105,3 @@ router.post(
 //         sendResponse(res);
 //     })
 // );
-
-module.exports = router;
