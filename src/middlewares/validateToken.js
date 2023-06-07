@@ -10,14 +10,14 @@ module.exports =
             const decoded = jwt.verify(token, secretKey);
             return decoded;
         } catch (error) {
-            return (decoded = null);
+            return null;
         }
     };
 
 // Llevar este código donde se tenga que ejecutar.
 
-
-
+/*
+// pasado a loginUser
 const token = "..."; // El token que deseas validar
 const secretKey = "..."; // Llamar al .env con la CLAVE SECRETA del token
 
@@ -27,3 +27,4 @@ if ((decodedToken = null)) {
     // El token no es válido
     sendError();
 }
+*/

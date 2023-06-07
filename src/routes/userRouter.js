@@ -43,5 +43,4 @@ router.patch("/users/:id", json(), (req, res) => {
     res.json(req.body);
 });
 
-
 module.exports = router;
