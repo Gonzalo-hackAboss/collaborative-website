@@ -19,7 +19,7 @@ app.listen(PORT, () => {
 /* Error 404 */
 
 app.use((req, res, next) => {
-    notFound();
+    console.log(notFound);
 });
 
 /* Errores 

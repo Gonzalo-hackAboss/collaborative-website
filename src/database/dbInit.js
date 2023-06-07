@@ -15,7 +15,9 @@ const initDB = async () => {
     await pool.query(`CREATE DATABASE ${DATABASE_NAME}`);
     await pool.query(`USE ${DATABASE_NAME}`);
     // Eliminamos previos de la BBDD
-    await pool.query(`DROP DATABASE IF EXISTS categories, Posts, Users;`);
+    await pool.query(
+        `DROP TABLE IF EXISTS Votes, PostComments, Validation, PostImages, CategoriesPosts, Categories, Posts, Users;`
+    );
     //CREO LA TABLA DE USUARIOS
     await createDataBaseTables(pool);
     await insertAdminUsers(pool);
@@ -37,6 +39,7 @@ async function createDataBaseTables(pool) {
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );`);
+
     //CREO LA TABLA DE POST
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Posts(
