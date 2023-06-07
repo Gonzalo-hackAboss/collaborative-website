@@ -15,6 +15,25 @@ const sendResponse = require("../utils/sendResponse.js");
 const router = Router();
 
 /*
+ ****    POSTS   ****
+ */
+
+router.get("/posts", (req, res) => {
+    sendResponse();
+});
+
+/*
+ **** VOTOS  ***
+ */
+
+router.post("/posts/:id/votes", async (req, res) => {
+    console.log("has votado - esto luego se elimina");
+    const { postId } = req.params; // ID del post
+    const { vote } = req.body; // Valor del voto (true o false)
+    const userId = req.user.id; // ID del usuario autenticado
+});
+
+/*
  ****    GET     ****
  */
 // router.get(
@@ -25,10 +44,6 @@ const router = Router();
 //         sendResponse(res, posts);
 //     })
 // );
-
-router.get("/posts", (req, res) => {
-    sendResponse();
-});
 
 // router.get(
 //     "/posts/:id",
