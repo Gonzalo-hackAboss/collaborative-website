@@ -10,6 +10,6 @@ const dbService = require("../src/database/services/dbService.js");
         acceptedTOS: true,
     });
 
-    console.log(result);
-    console.log(await dbService.getAllUsers());
+   
+    
 })();

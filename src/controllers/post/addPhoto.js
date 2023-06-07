@@ -1,8 +1,8 @@
 
-const { generateUUID } = require("../src/services/cryptoServices");
-const dbService = require("../src/services/dbService.js");
-const fileService = require("../src/services/fileServices.js");
-const errorService = require("../src/services/errorService.js");
+const { generateUUID } = require("../../services/cryptoServices");
+const dbService = require("../../services/dbService.js");
+const fileService = require("../../services/fileServices.js");
+const errorService = require("../../services/errorService.js");
 
 module.exports = async (postId, userId, photo) => {
     const id = generateUUID();

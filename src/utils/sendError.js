@@ -5,7 +5,7 @@
  */
 
 module.exports = (res, error) => {
-    console.log(res);
+    
     res.status(error.status ?? 500).json({
         success: false,
         error: {
