@@ -32,41 +32,41 @@ router.get("/posts", (req, res) => {
     sendResponse();
 });
 
-router.get(
-    "/posts/:id",
-    handleAsyncError(async (req, res) => {
-        // Obtener el post con id req.params.id
-        const post = await viewPostDetail(req.params.id);
-        sendResponse(res, post);
-    })
-);
+// router.get(
+//     "/posts/:id",
+//     handleAsyncError(async (req, res) => {
+//         // Obtener el post con id req.params.id
+//         const post = await viewPostDetail(req.params.id);
+//         sendResponse(res, post);
+//     })
+// );
 
 /*
  ****    POST    ****
  */
 
-router.post(
-    "/posts",
-    authGuard,
-    json(),
-    handleAsyncError(async (req, res) => {
-        console.log("hola"),
-            // Crear un nuevo post
-            await createPost(req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201); // revisar el envío de respuesta
-    })
-);
+// router.post(
+//     "/posts",
+//     authGuard,
+//     json(),
+//     handleAsyncError(async (req, res) => {
+//         console.log("hola"),
+//             // Crear un nuevo post
+//             await createPost(req.currentUser.id, req.body);
+//         sendResponse(res, undefined, 201); // revisar el envío de respuesta
+//     })
+// );
 
-router.post(
-    "/posts/:id/comments",
-    authGuard,
-    json(),
-    handleAsyncError(async (req, res) => {
-        //Agregar un nuevo comentario al post con id req.params.id
-        await addComment(req.params.id, req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201);
-    })
-);
+// router.post(
+//     "/posts/:id/comments",
+//     authGuard,
+//     json(),
+//     handleAsyncError(async (req, res) => {
+//         //Agregar un nuevo comentario al post con id req.params.id
+//         await addComment(req.params.id, req.currentUser.id, req.body);
+//         sendResponse(res, undefined, 201);
+//     })
+// );
 
 module.exports = router;
 
