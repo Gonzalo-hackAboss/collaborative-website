@@ -2,10 +2,10 @@
 const { Router } = require("express");
 const { json } = require("express");
 
-const registerUser = require("../user/registerUser.js");
-const loginUser = require("../user/loginUser.js");
-const sendResponse = require("../../utils/sendResponse.js");
-const authGuard = require("../../middlewares/authGuard.js");
+const registerUser = require("../controllers/user/registerUser.js");
+const loginUser = require("../controllers/user/loginUser.js");
+const sendResponse = require("../utils/sendResponse.js");
+const authGuard = require("../middlewares/authGuard.js");
 
 const router = Router();
 

@@ -1,11 +1,11 @@
 "use strict";
 
-const { generateUUID } = require("../src/services/cryptoServices.js");
+const { generateUUID } = require("../../services/cryptoServices.js");
 const {
     checkUserPermission,
     saveComment,
-} = require("../src/services/dbService.js");
-const errorService = require("../src/services/errorService.js");
+} = require("../../services/dbService.js");
+const errorService = require("../../services/errorService.js");
 
 module.exports = async (postId, currentUserId, commentPayload) => {
     const hasPermission = await checkUserPermission(postId, currentUserId);

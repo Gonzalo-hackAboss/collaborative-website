@@ -1,17 +1,16 @@
 const { Router, json } = require("express");
-const fileUpload = require("express-fileupload");
 
-const addComment = require("../../post/addComment.js");
+const addComment = require("../controllers/post/addComment.js");
 // const addPhoto = require("../../post/addPhoto.js");
-const createPost = require("../../post/createPost.js");
-const deleteComment = require("../../post/deleteComment.js");
-const deletePhoto = require("../../post/deletePhoto.js");
-const deletePost = require("../../post/deletePost.js");
-const editComment = require("../../post/editComment.js");
-const editPost = require("../../post/editPost.js");
+const createPost = require("../controllers/post/createPost.js");
+const deleteComment = require("../controllers/post/deleteComment.js");
+const deletePhoto = require("../controllers/post/deletePhoto.js");
+const deletePost = require("../controllers/post/deletePost.js");
+const editComment = require("../controllers/post/editComment.js");
+const editPost = require("../controllers/post/editPost.js");
 const handleAsyncError = require("../services/handleAsyncError.js");
-const authGuard = require("../../middlewares/authGuard.js");
-const sendResponse = require("../../utils/sendResponse.js");
+const authGuard = require("../middlewares/authGuard.js");
+const sendResponse = require("../utils/sendResponse.js");
 
 const router = Router();
 
@@ -28,7 +27,6 @@ const router = Router();
 // );
 
 router.get("/posts", (req, res) => {
-    console.log("hola");
     sendResponse();
 });
 
@@ -45,17 +43,16 @@ router.get("/posts", (req, res) => {
  ****    POST    ****
  */
 
-// router.post(
-//     "/posts",
-//     authGuard,
-//     json(),
-//     handleAsyncError(async (req, res) => {
-//         console.log("hola"),
-//             // Crear un nuevo post
-//             await createPost(req.currentUser.id, req.body);
-//         sendResponse(res, undefined, 201); // revisar el envío de respuesta
-//     })
-// );
+router.post(
+    "/posts",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        // Crear un nuevo post
+        await createPost(req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201); // revisar el envío de respuesta
+    })
+);
 
 // router.post(
 //     "/posts/:id/comments",
