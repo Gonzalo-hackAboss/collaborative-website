@@ -24,7 +24,7 @@ const router = Router();
 router.get("/posts", (req, res) => {
 
     sendResponse();
-=======
+});
 router.get("/posts", () => {
     handleAsyncError(async (req, res) => {
         const posts = await listPosts();
