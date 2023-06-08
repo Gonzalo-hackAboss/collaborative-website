@@ -37,18 +37,9 @@ async function createDataBaseTables(pool) {
         biography CHAR(255),
         avatarURL VARCHAR(255),
         country VARCHAR(150),
+        role ENUM('Administrador', 'Moderador', 'Usuario', 'VIP') DEFAULT 'Usuario',
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    );`);
-
-    // CREO LA TABLA DE ROLES
-    await pool.query(`
-    CREATE TABLE IF NOT EXISTS Roles(
-        id CHAR(36) PRIMARY KEY,
-        userId CHAR(36) NOT NULL,
-        role ENUM('Administrador', 'Moderador', 'Usuario', 'VIP') DEFAULT 'Usuario',
-        FOREIGN KEY (idUser) REFERENCES Users (id) ON DELETE CASCADE
-
     );`);
 
     //CREO LA TABLA DE POST
@@ -67,7 +58,7 @@ async function createDataBaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Categories(
         id CHAR(36) PRIMARY KEY,
-        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional, 'Nacional') NOT NULL,
+        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional, 'Nacional', 'Música') NOT NULL,
         description VARCHAR(50) NOT NULL
     );`);
     // DEFINIR QUE CATEGORIAS USAREMOS!
