@@ -2,8 +2,8 @@
 
 require("dotenv").config();
 
-const hashpassword = require("../services/cryptoServices.js");
-const { getConnection } = require("./mysqlConnection.js");
+const hashpassword = require("../../services/cryptoServices.js");
+const { getConnection } = require("../database/mysqlConnection.js");
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
@@ -16,7 +16,7 @@ const initDB = async () => {
     await pool.query(`USE ${DATABASE_NAME}`);
     // Eliminamos previos de la BBDD
     await pool.query(
-        `DROP TABLE IF EXISTS Votes, PostComments, Validation, PostImages, CategoriesPosts, Categories, Posts, Users;`
+        `DROP TABLE IF EXISTS Votes, PostComments, Validation, PostImages, CategoriesPosts, Categories, Posts, Roles, Users;`
     );
     //CREO LA TABLA DE USUARIOS
     await createDataBaseTables(pool);
@@ -33,6 +33,7 @@ async function createDataBaseTables(pool) {
         password VARCHAR(50) NOT NULL,
         birthday CHAR(8) NOT NULL,
         acceptedTOS BOOL NOT NULL,
+        validated BOOL NOT NULL DEFAULT false,
         biography CHAR(255),
         avatarURL VARCHAR(255),
         country VARCHAR(150),
@@ -40,13 +41,22 @@ async function createDataBaseTables(pool) {
         modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );`);
 
+    // CREO LA TABLA DE ROLES
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS Roles(
+        id CHAR(36) PRIMARY KEY,
+        userId CHAR(36) NOT NULL,
+        role ENUM('Administrador', 'Moderador', 'Usuario', 'VIP') DEFAULT 'Usuario',
+        FOREIGN KEY (idUser) REFERENCES Users (id) ON DELETE CASCADE
+
+    );`);
+
     //CREO LA TABLA DE POST
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Posts(
         id CHAR(36) PRIMARY KEY,
         title VARCHAR(50) NOT NULL,
-        description VARCHAR(150) NOT NULL,
-        category VARCHAR(50) NOT NULL,
+        description TEXT NOT NULL,
         idUser CHAR(36),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         modifiedAt TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -57,9 +67,10 @@ async function createDataBaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Categories(
         id CHAR(36) PRIMARY KEY,
-        category VARCHAR(50) NOT NULL,
+        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional, 'Nacional') NOT NULL,
         description VARCHAR(50) NOT NULL
     );`);
+    // DEFINIR QUE CATEGORIAS USAREMOS!
 
     // CREAMOS TABLA DE CATEGORIAS Y POSTS PARA BUSCADOR
     await pool.query(`
@@ -120,3 +131,26 @@ CREATE TABLE IF NOT EXISTS Votes(
 	FOREIGN KEY (idPost) REFERENCES Posts (id)
 );`);
 }
+
+initDB();
+
+// async function generateFakeUsers(pool) {
+//     const [users, posts] = await generateUsersAndPosts();
+//     for (const user of users) {
+//         await pool.execute(
+//             `
+//         INSERT INTO Users(id,nameMember,email,password,birthday,acceptedTOS,validated)
+//         VALUES(?,?,?,?,?,?,?)
+//         `,
+//             [
+//                 user.id,
+//                 user.nameMember,
+//                 user.email,
+//                 user.password,
+//                 user.birthday,
+//                 user.acceptedTOS,
+//                 user.validated,
+//             ]
+//         );
+//     }
+// }

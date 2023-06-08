@@ -1,11 +1,12 @@
 "use strict";
-/**
- * pendiente confirmar si funciona
- */
+
 const { getConnection } = require("../../database/mysqlConnection.js");
 const cryptoServices = require("../../services/cryptoServices.js");
 const jwt = require("jsonwebtoken");
-const timeService = require("../../services/timeService.js");
+const validateToken = require("../../middlewares/validateToken");
+const sendError = require("../../utils/sendError.js");
+// const timeService = require("../../services/timeService.js");
+
 async function loginUser(email, password) {
     const pool = getConnection();
 
@@ -23,7 +24,7 @@ async function loginUser(email, password) {
         throw new Error("Invalid email or password");
     }
 
-    const passwordMatch = await crystoServices.comparePasswords(
+    const passwordMatch = await cryptoServices.validatePasswords(
         password,
         user.password
     );
@@ -31,20 +32,16 @@ async function loginUser(email, password) {
     if (!passwordMatch) {
         throw new Error("Invalid email or password");
     }
-    // Generar el token
-    const generateToken = (user) => {
-        const userData = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-        };
-        const token = jwt.sign(userData, "secretKey", {
-            expiresIn: timeService.getTimestampMinutesFromNow(6), // expira en 6 minutos
-        });
-        // "secretKey" // esta será una clave secreta real y segura para firmar el token
-        return token;
-    };
-    const token = generateToken(user);
-    return token;
+
+    const token = generateJWT(user);
+    const secretKey = process.env.JWT_SECRET; // llama .env con clave secreta
+
+    const decodedToken = validateToken(token, secretKey);
+
+    if (decodedToken === null) {
+        // El token no es válido
+        sendError();
+    }
 }
+
 module.exports = loginUser;

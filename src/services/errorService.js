@@ -44,4 +44,10 @@ module.exports = {
         error.code = "RESOURCE_NOT_FOUND";
         throw error;
     },
+
+    requestFailed: () => {
+        const error = new Error("The request provide cannot be finished");
+        error.status = 500; // Revisar y concretar error.
+        error.code = "INVALID_METHOD";
+    },
 };
