@@ -138,14 +138,14 @@ module.exports = {
         await db.execute(statement, [postId, userId]);
     },
 
-    async countLikesByPostId(postId) {
+    async countVotes(postId) {
         const statement = `
-        SELECT COUNT(*) as likes FROM post_likes
+        SELECT COUNT(*) as votes FROM Votes
         WHERE postId = ?
       `;
         const [rows] = await db.execute(statement, [postId]);
-        return rows[0].likes;
-    },
+        return rows[0].votes;
+    }, // Actualizado para contar los VOTOS, no likes. Posiblemente tengamos que darle una vuelta por el tema de sumar/restar el boolean.
 
     async countCommentsByPostId(postId) {
         const statement = `

@@ -5,7 +5,6 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const morgan = require("morgan");
 
-//const getComments = require('./post/getComments.js');
 const appRouter = require("./src/routes/appRouter.js");
 const sendError = require("./src/utils/sendError.js");
 
