@@ -3,7 +3,7 @@
 const { getConnection } = require("../../database/mysqlConnection.js");
 const cryptoServices = require("../../services/cryptoServices.js");
 const jwt = require("jsonwebtoken");
-const validateToken = require("../middlewares/validateToken");
+const validateToken = require("./validateToken");
 const sendError = require("./src/utils/sendError.js");
 // const timeService = require("../../services/timeService.js");
 
