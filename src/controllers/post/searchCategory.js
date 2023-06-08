@@ -1,5 +1,5 @@
-const { getConnection } = require("../database/mysqlConnection.js");
-const { searchError } = require("../services/error-service.js");
+const { getConnection } = require("../../database/mysqlConnection.js");
+const { searchError } = require("../../services/errorService.js");
 
 const db = getConnection();
 

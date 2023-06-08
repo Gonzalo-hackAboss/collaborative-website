@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
-const cryptoService = require("../../services/cryptoServices.js");
-const validateToken = require("./tokenValidator.js");
+const cryptoService = require("../services/cryptoServices.js");
 const sendError = require("../utils/sendError.js");
 
 module.exports =

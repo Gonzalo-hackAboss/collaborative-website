@@ -3,8 +3,8 @@
 const { getConnection } = require("../../database/mysqlConnection.js");
 const cryptoServices = require("../../services/cryptoServices.js");
 const jwt = require("jsonwebtoken");
-const validateToken = require("../middlewares/validateToken");
-const sendError = require("./src/utils/sendError.js");
+const validateToken = require("../../middlewares/validateToken");
+const sendError = require("../../utils/sendError.js");
 // const timeService = require("../../services/timeService.js");
 
 async function loginUser(email, password) {
