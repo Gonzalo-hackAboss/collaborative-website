@@ -10,7 +10,7 @@ const authGuard = require("../middlewares/authGuard.js");
 
 const router = Router();
 
-router.get("/prueba", (req, res) => {
+router.get("/news", (req, res) => {
     console.log("Hola");
     sendResponse(res);
 });
