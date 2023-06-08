@@ -112,30 +112,27 @@ module.exports = {
       `;
         await db.execute(statement, Object.values(postComment));
     },
+    // TRAIGO AQUI EL CONTENIDO DE searchCategory.js y dejo en ese archivo solo el
+    async searchByCategory(searchTerm, categoryNameArray) {
+        try {
+            const likeTerm = `%${searchTerm}%`;
+            let statement = `
+          SELECT * FROM Tems
+          WHERE ?
+          `;
+            for (let i = 0; i < categoryNameArray.length; i++) {
+                statement += "OR c.name = ?";
+            }
 
-    async createLike(like) {
-        const statement = `
-        INSERT INTO post_likes(id, userId, postId)
-        VALUES(?, ?, ?)
-      `;
-        await db.execute(statement, Object.values(like));
-    },
-
-    async likeExists(postId, userId) {
-        const statement = `
-        SELECT * FROM post_likes
-        WHERE postId = ? AND userId = ?
-      `;
-        const [rows] = await db.execute(statement, [postId, userId]);
-        return !!rows[0];
-    },
-
-    async deleteLikeByUserId(postId, userId) {
-        const statement = `
-        DELETE FROM post_likes
-        WHERE postId = ? AND userId = ?
-      `;
-        await db.execute(statement, [postId, userId]);
+            await db.execute(statement, categoryNameArray);
+            const [rows, fields] = await db.execute(
+                statement,
+                categoryNameArray
+            );
+            return rows;
+        } catch (err) {
+            searchError(err);
+        }
     },
 
     async countVotes(postId) {
@@ -165,7 +162,7 @@ module.exports = {
     },
 
     async updateComment(commentId, commentPayload) {
-        const statement = `
+        const statement = ` 
         UPDATE post_comments
         SET comment = ?
         WHERE id = ?
