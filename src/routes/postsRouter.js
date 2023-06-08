@@ -29,6 +29,7 @@ const router = Router();
 // );
 
 router.get("/posts", (req, res) => {
+
     sendResponse();
 });
 
