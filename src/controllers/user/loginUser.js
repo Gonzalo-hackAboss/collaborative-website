@@ -4,24 +4,27 @@ const { getConnection } = require("../../database/mysqlConnection.js");
 const cryptoServices = require("../../services/cryptoServices.js");
 const jwt = require("jsonwebtoken");
 const validateToken = require("../../middlewares/validateToken");
-const sendError = require("../../utils/sendError.js");
-// const timeService = require("../../services/timeService.js");
+const errorService = require("../../services/errorService.js");
 
 async function loginUser(email, password) {
     const pool = getConnection();
+
+    if (!email || !password) {
+        throw errorService.invalidCredentials();
+    }
 
     const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
         email,
     ]);
 
     if (rows.length === 0) {
-        throw new Error("Invalid email or password");
+        throw errorService.invalidCredentials();
     }
 
     const user = rows[0];
 
     if (!user.emailValidated) {
-        throw new Error("Invalid email or password");
+        throw errorService.emailNotValidated();
     }
 
     const passwordMatch = await cryptoServices.validatePasswords(
@@ -30,7 +33,7 @@ async function loginUser(email, password) {
     );
 
     if (!passwordMatch) {
-        throw new Error("Invalid email or password");
+        throw errorService.invalidCredentials();
     }
 
     const token = generateJWT(user);
@@ -39,8 +42,7 @@ async function loginUser(email, password) {
     const decodedToken = validateToken(token, secretKey);
 
     if (decodedToken === null) {
-        // El token no es válido
-        sendError();
+        throw errorService.notAuthenticated();
     }
 }
 
