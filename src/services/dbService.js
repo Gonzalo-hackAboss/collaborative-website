@@ -7,8 +7,8 @@ const db = getConnection();
 module.exports = {
     async saveUser(user) {
         const statement = `
-        INSERT INTO users(id, name, email, password, birthDate, country, acceptedTOS, emailValidated)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Users(id, nameMember, email, password, birthDate, acceptedTOS, validated)
+        VALUES(?, ?, ?, ?, ?, ?, ?)
       `;
         await db.execute(statement, Object.values(user));
     },
