@@ -1,7 +1,7 @@
 const { Router, json } = require("express");
 
 const addComment = require("../controllers/post/addComment.js");
-// const addPhoto = require("../../post/addPhoto.js");
+const addPhoto = require("../controllers/post/addPhoto.js");
 const createPost = require("../controllers/post/createPost.js");
 const deleteComment = require("../controllers/post/deleteComment.js");
 const deletePhoto = require("../controllers/post/deletePhoto.js");
@@ -21,54 +21,30 @@ const router = Router();
  */
 
 
-router.get("/posts", (req, res) => {
+ router.get("/posts", handleAsyncError(async (req, res) => {
+    const posts = await listPosts();
+    sendResponse(res, posts);
+}));
 
-    sendResponse();
-});
-router.get("/posts", () => {
-    handleAsyncError(async (req, res) => {
-        const posts = await listPosts();
-        sendResponse(res, posts);
-    });
-});
+router.get("/posts/search-post-categories", handleAsyncError(async (req, res) => {
+    const search = await searchByCategory();
+    sendResponse(res, search);
+}));
 
-router.get("/posts/search-post-categories", () => {
-    handleAsyncError(async (req, res) => {
-        const search = await searchByCategory();
-        sendResponse(res, search);
-    });
+router.get("/posts/:id", handleAsyncError(async (req, res) => {
+    const post = await viewPostDetail(req.params.id);
+    sendResponse(res, post);
+}));
 
-});
+router.post("/posts", authGuard, json(), handleAsyncError(async (req, res) => {
+    await createPost(req.currentUser.id, req.body);
+    sendResponse(res, undefined, 201);
+}));
 
-router.get(
-    "/posts/:id",
-    handleAsyncError(async (req, res) => {
-        const post = await viewPostDetail(req.params.id);
-        sendResponse(res, post);
-    })
-);
-
-router.post(
-    "/posts",
-    authGuard,
-    json(),
-    handleAsyncError(async (req, res) => {
-        await createPost(req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201);
-    })
-);
-
-router.post(
-    "/posts/:id/comments",
-    authGuard,
-    json(),
-    handleAsyncError(async (req, res) => {
-        //Agregar un nuevo comentario al post con id req.params.id
-        await addComment(req.params.id, req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201);
-    })
-);
-
+router.post("/posts/:id/comments", authGuard, json(), handleAsyncError(async (req, res) => {
+    await addComment(req.params.id, req.currentUser.id, req.body);
+    sendResponse(res, undefined, 201);
+}));
 /*
  **** VOTOS  ***
  */
