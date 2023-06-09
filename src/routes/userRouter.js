@@ -18,11 +18,8 @@ router.get("/news", (req, res) => {
 });
 
 router.post("/users/register", json(), async (req, res) => {
-    validateBody(registerPayload);
-    handleAsyncError(async (req, res) => {
-        await registerUser(req.body);
-        sendResponse(res);
-    });
+    const result = await registerUser(req.body);
+    res.json(result);
 });
 
 // router.post("/users/register", json(), async (req, res) => {
@@ -34,11 +31,12 @@ router.post("/users/register", json(), async (req, res) => {
 // });
 
 router.post("/users/login", json(), async (req, res) => {
-    //Loguea el usuario y devuelve un token de login
-    const token = await loginUser(req.body);
-    sendResponse(res, {
-        token,
-    });
+    try {
+        const token = await loginUser(req.body);
+        sendResponse(res, { token });
+    } catch (error) {
+        sendError(res, error);
+    }
 });
 
 router.get("/users/:id", authGuard, (req, res) => {

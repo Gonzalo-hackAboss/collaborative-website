@@ -5,12 +5,15 @@
  */
 
 module.exports = (res, error) => {
+    const status = error.status || 500;
+    const code = error.code || "UNEXPECTED_ERROR";
+    const msg = error.message || "¡Ha ocurrido un error inesperado!";
     
-    res.status(error.status ?? 500).json({
+    res.status(status).json({
         success: false,
         error: {
-            code: error.code ?? "UNEXPECTED_ERROR",
-            msg: error.message ?? "¡Ha ocurrido un error inesperado!",
+            code: code,
+            msg: msg,
         },
     });
 };
