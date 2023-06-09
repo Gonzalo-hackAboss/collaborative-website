@@ -20,6 +20,11 @@ const router = Router();
  ****    POSTS   ****
  */
 
+
+router.get("/posts", (req, res) => {
+
+    sendResponse();
+});
 router.get("/posts", () => {
     handleAsyncError(async (req, res) => {
         const posts = await listPosts();
@@ -32,6 +37,7 @@ router.get("/posts/search-post-categories", () => {
         const search = await searchByCategory();
         sendResponse(res, search);
     });
+
 });
 
 router.get(
