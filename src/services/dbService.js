@@ -7,13 +7,13 @@ const db = getConnection();
 module.exports = {
     async saveUser(user) {
         const statement = `
-        INSERT INTO users(id, name, email, password, birthDate, country, acceptedTOS, emailValidated)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Users(id, nameMember, email, password, birthDate, acceptedTOS, validated)
+        VALUES(?, ?, ?, ?, ?, ?, ?)
       `;
         await db.execute(statement, Object.values(user));
     },
 
-    async getUserByEmailUNSAFE(email) {
+    async getUserByEmail(email) {
         const statement = `
         SELECT *
         FROM users
@@ -25,7 +25,14 @@ module.exports = {
     },
 
     async getEnabledUsers() {
-        return usersTable.filter(({ emailValidated }) => emailValidated);
+      const statement = `
+        SELECT *
+        FROM users
+        WHERE emailValidated = true
+      `;
+      const [rows] = await db.execute(statement);
+  
+      return rows;
     },
 
     async saveValidationCode(code) {
@@ -37,7 +44,13 @@ module.exports = {
     },
 
     async getAllUsers() {
-        return usersTable;
+      const statement = `
+        SELECT *
+        FROM users
+      `;
+      const [rows] = await db.execute(statement);
+  
+      return rows;
     },
 
     async getAllPosts() {
@@ -75,12 +88,12 @@ module.exports = {
     },
 
     async updatePost(post) {
-        const statement = `
+      const statement = `
         UPDATE posts
         SET title = ?, description = ?
         WHERE id = ?
       `;
-        await db.execute(statement, Object.values(post).slice(2));
+      await db.execute(statement, [post.title, post.description, post.id]);
     },
 
     async getPostById(postId) {
@@ -112,6 +125,8 @@ module.exports = {
       `;
         await db.execute(statement, Object.values(postComment));
     },
+
+
     // TRAIGO AQUI EL CONTENIDO DE searchCategory.js y dejo en ese archivo solo el
     async searchByCategory(searchTerm, categoryNameArray) {
         try {
@@ -167,7 +182,7 @@ module.exports = {
         SET comment = ?
         WHERE id = ?
       `;
-        await db.execute(statement, Object.values(commentPayload).reverse());
+        await db.execute(statement, [commentPayload.comment, commentId]);  
     },
 
     async deleteComment(commentId) {

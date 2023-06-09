@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const cryptoService = require("../services/cryptoServices.js");
 const sendError = require("../utils/sendError.js");
 
-module.exports =
+
     // Exportar esto:
     function validateToken(token, secretKey) {
         try {
@@ -12,6 +12,8 @@ module.exports =
             return null;
         }
     };
+
+    module.exports = validateToken;
 
 // Llevar este código donde se tenga que ejecutar.
 

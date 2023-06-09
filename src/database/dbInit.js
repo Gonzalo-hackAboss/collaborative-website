@@ -58,7 +58,7 @@ async function createDataBaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Categories(
         id CHAR(36) PRIMARY KEY,
-        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional', 'Nacional', 'Música') NOT NULL,
+        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional, 'Nacional', 'Música') NOT NULL,
         description VARCHAR(50) NOT NULL
     );`);
     // DEFINIR QUE CATEGORIAS USAREMOS!
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS Votes(
 );`);
 }
 
-initDB();
+initDB().catch(console.error);
 
 // async function generateFakeUsers(pool) {
 //     const [users, posts] = await generateUsersAndPosts();
