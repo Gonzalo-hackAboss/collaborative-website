@@ -1,8 +1,9 @@
 "use strict";
 
+const jwt = require("jsonwebtoken");
+
 const { getConnection } = require("../../database/mysqlConnection.js");
 const cryptoServices = require("../../services/cryptoServices.js");
-const jwt = require("jsonwebtoken");
 const validateToken = require("../../middlewares/validateToken");
 const errorService = require("../../services/errorService.js");
 

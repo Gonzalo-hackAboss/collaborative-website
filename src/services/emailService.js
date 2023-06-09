@@ -18,6 +18,8 @@ module.exports = {
     setSenderCredentials(email, password) {
         senderEmail = email;
         senderPassword = password;
+        transporter.options.auth.user = senderEmail; 
+        transporter.options.auth.pass = senderPassword;
     },
     async sendValidationEmail(validationCode, recipientEmail) {
         try {
