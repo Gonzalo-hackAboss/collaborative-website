@@ -18,7 +18,6 @@ app.use(appRouter);
 
 //middleware de error
 app.use((err, req, res, next) => {
-    console.error(err);
     sendError(res, err);
 });
 
@@ -31,16 +30,6 @@ app.use((req, res) => {
         message: `Endpoint desconocido: ${req.method} ${req.path}`,
     });
 });
-
-/* Error 404 */
-
-//app.use((req, res, next) => {
-//   console.log(notFound);
-//});
-
-/* Errores 
-sendError();
-*/
 
 app.listen(PORT, () => {
     console.log("Server iniciado en el puerto " + PORT);
