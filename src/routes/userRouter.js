@@ -6,7 +6,7 @@ const registerUser = require("../controllers/user/registerUser.js");
 const loginUser = require("../controllers/user/loginUser.js");
 const sendResponse = require("../utils/sendResponse.js");
 const sendError = require("../utils/sendError.js");
-const authGuard = require("../middlewares/authGuard.js");
+const authGuard = require("./../middlewares/authGuard.js");
 
 const router = Router();
 

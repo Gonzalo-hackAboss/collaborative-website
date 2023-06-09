@@ -8,6 +8,10 @@ const errorService = require()(async () => {
         birthdate: new Date(1967, 2, 17),
         country: "Spain",
         acceptedTOS: true,
+        if (!result) {
+            return errorService.invalidCredentials;
+        }
+
     });
     if (!result) {
         return errorService.invalidCredentials();

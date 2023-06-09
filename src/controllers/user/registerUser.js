@@ -2,7 +2,7 @@
 const cryptoServices = require("../../services/cryptoServices.js");
 const dbServices = require("../../services/dbService.js");
 const emailServices = require("../../services/emailService.js");
-const timeServices = require("../../services/timeService.js");
+const timeService = require("../../services/timeService.js");
 const errorService = require("../../services/errorService.js");
 
 module.exports = async (userData) => {
@@ -30,6 +30,9 @@ module.exports = async (userData) => {
     };
     await dbServices.saveUser(user);
 
+    // Establecer las credenciales del remitente
+    emailServices.setSenderCredentials(user.email, user.password);
+
     // Se guarda el código de validación
     const expiraTimestamp = timeService.getTimestampMinutesFromNow(6);
     const validationCode = {
@@ -41,7 +44,7 @@ module.exports = async (userData) => {
     await dbServices.saveValidationCode(validationCode);
 
     // Se envía mail
-    await emailServices.sendValidationEmail(validationCode);
+    await emailServices.sendValidationEmail();
 
     return {
         success: true,

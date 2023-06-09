@@ -2,7 +2,7 @@
 
 module.exports = {
     invalidCredentials: () => {
-        const error = new Error("Invalid credentials");
+        const error = new Error("You must enter a valid email and password");
         error.status = 400;
         error.code = "INVALID_CREDENTIALS";
         throw error;
@@ -49,5 +49,6 @@ module.exports = {
         const error = new Error("The request provide cannot be finished");
         error.status = 500; // Revisar y concretar error.
         error.code = "INVALID_METHOD";
+        throw error;
     },
 };
