@@ -16,16 +16,21 @@ router.get("/news", (req, res) => {
 });
 
 router.post("/users/register", json(), async (req, res) => {
-    const result = await registerUser(req.body);
-    res.json(result);
+    try {
+        const result = await registerUser(req.body);
+        sendResponse(res, result);
+    } catch (error) {
+        sendError(res, error);
+    }
 });
 
 router.post("/users/login", json(), async (req, res) => {
-    //Loguea el usuario y devuelve un token de login
-    const token = await loginUser(req.body);
-    sendResponse(res, {
-        token,
-    });
+    try {
+        const token = await loginUser(req.body);
+        sendResponse(res, { token });
+    } catch (error) {
+        sendError(res, error);
+    }
 });
 
 router.get("/users/:id", authGuard, (req, res) => {
