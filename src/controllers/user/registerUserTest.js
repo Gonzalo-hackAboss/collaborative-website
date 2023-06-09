@@ -1,7 +1,7 @@
 "use strict";
 const registerUser = require("./registerUser.js");
 const dbService = require("../../services/dbService.js");
-(async () => {
+const errorService = require()(async () => {
     const result = await registerUser({
         email: "anai@test.com",
         password: "nomelose22",
@@ -9,4 +9,7 @@ const dbService = require("../../services/dbService.js");
         country: "Spain",
         acceptedTOS: true,
     });
+    if (!result) {
+        return errorService.invalidCredentials();
+    }
 })();
