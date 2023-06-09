@@ -19,7 +19,7 @@ module.exports = {
         const error = new Error(
             "The user must accept the terms and conditions to register"
         );
-        error.status = 400;
+        error.status = 403;
         error.code = "DID_NOT_ACCEPT_TOS";
         throw error;
     },
