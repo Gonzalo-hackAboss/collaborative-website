@@ -9,7 +9,7 @@ const dbService = require("../../services/dbService.js");
         password: "nomelose22",
         birthdate: new Date(1967, 2, 17),
         country: "Spain",
-        acceptedTOS: true
+        acceptedTOS: true,
     });
 
     if (result) {
