@@ -1,28 +1,27 @@
 "use strict";
-
 require("dotenv").config();
-const { getConnection } = require("../database/mysqlConnection.js");
-const { hashPassword } = require("../services/cryptoServices.js");
+const { createPool } = require("./mysqlConnection");
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
 const initDB = async () => {
-    const pool = getConnection();
-    //BORRO LA BASE DE DATOS SI EXISTE
+    const pool = createPool();
+    // BORRO LA BASE DE DATOS SI EXISTE
     await pool.query(`DROP DATABASE IF EXISTS ${DATABASE_NAME}`);
-    //CREO LA BASE DE DATOS
+
+    // CREO LA BASE DE DATOS
     await pool.query(`CREATE DATABASE ${DATABASE_NAME}`);
     await pool.query(`USE ${DATABASE_NAME}`);
-    // Eliminamos previos de la BBDD
-    await pool.query(
-        `DROP TABLE IF EXISTS Votes, PostComments, Validation, PostImages, CategoriesPosts, Categories, Posts, Roles, Users;`
-    );
-    //CREO LA TABLA DE USUARIOS
+
+    // CREO LA TABLA DE USUARIOS
     await createDataBaseTables(pool);
-    await insertAdminUsers(pool);
-    await insertModUsers(pool);
+
+    // await insertAdminUsers(pool);
+    // await generateFakeData(pool);
+
     await pool.end();
 };
+
 async function createDataBaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Users(
@@ -122,7 +121,7 @@ CREATE TABLE IF NOT EXISTS Votes(
 );`);
 }
 
-initDB().catch(console.error);
+initDB();
 
 // async function generateFakeUsers(pool) {
 //     const [users, posts] = await generateUsersAndPosts();
