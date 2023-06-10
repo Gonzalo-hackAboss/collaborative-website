@@ -44,14 +44,16 @@ module.exports = {
     },
 
     async getAllUsers() {
-      const statement = `
-        SELECT *
-        FROM users
-      `;
-      const [rows] = await db.execute(statement);
-  
-      return rows;
-    },
+      try {
+          const db = getConnection();
+          const query = "SELECT * FROM users";
+          const [rows] = await db.query(query);
+          db.end();
+          return rows;
+      } catch (error) {
+          throw error;
+      }
+  },
 
     async getAllPosts() {
         const statement = `
