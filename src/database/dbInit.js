@@ -112,11 +112,11 @@ async function createDataBaseTables(pool) {
 
     //CREO LA TABLA DE VOTOS
     await pool.query(`
-CREATE TABLE IF NOT EXISTS Votes(
-	id CHAR(36) PRIMARY KEY,
-    idUser CHAR(36) NOT NULL,
-    idPost CHAR(36) NOT NULL,
-	votes BOOL NOT NULL,
+    CREATE TABLE IF NOT EXISTS Votes(
+	    id CHAR(36) PRIMARY KEY,
+        idUser CHAR(36) NOT NULL,
+        idPost CHAR(36) NOT NULL,
+	    votes BOOL NOT NULL,
 	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (idUser) REFERENCES Users (id),
 	FOREIGN KEY (idPost) REFERENCES Posts (id)
