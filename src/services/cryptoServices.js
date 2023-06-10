@@ -8,17 +8,17 @@ module.exports = {
     /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
 
     async hashPassword(plainPassword) {
-        return await bcrypt.hash(PlainPassword, 10);
+        return await bcrypt.hash(plainPassword, 10);
     },
     async validatePassword(plainPassword, hash) {
-        return await bcrypt.compare(PlainPassword, hash);
+        return await bcrypt.compare(plainPassword, hash);
     },
 
     /*Generar código aleatorio para validar los emails, un código de 6 dígitos.*/
     generaterandomvalidationcode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         return code;
-      },
+    },
 
     /*
     generaterandomvalidationcode() {
