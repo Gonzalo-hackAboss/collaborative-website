@@ -24,7 +24,11 @@ module.exports = async (userData) => {
         };
     }
     // Se hashea la contraseña
-    const hashedPassword = hashedPassword(userData.password);
+
+    const hashedPassword = cryptoServices.hashPassword(userData.password);
+
+   
+
 
     // Se genera el código de validación
     const randomCode = generateRandomValidationCode();
@@ -37,7 +41,7 @@ module.exports = async (userData) => {
         ...userData,
         password: hashedPassword,
         id: newUserId,
-        emailValidate: false,
+        emailValidated: false,
     };
     await saveUser(user);
 
@@ -47,7 +51,10 @@ module.exports = async (userData) => {
     // Se guarda el código de validación
     const expiraTimestamp = timeService.getTimestampMinutesFromNow(6);
     const validationCode = {
+
+
         id: generateUUID(),
+ 
         userId: user.id,
         code: randomCode,
         expiraTimestamp,

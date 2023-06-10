@@ -5,15 +5,30 @@ const { saveUser } = require("../services/dbService");
 const roles = ["Usuario", "Administrador", "Moderador", "VIP"];
 const randomizador = Math.floor(Math.random() * roles.length);
 
-const user = {
-    id: generateUUID(),
-    nameMember: casual.username,
-    email: casual.email,
-    password: hashPassword(casual.password),
-    birthday: casual.date((format = "YYYY-MM-DD")),
-    acceptedTOS: true,
-    validated: casual.boolean,
-    role: roles[randomizador],
-};
+async function createUser() {
+    try {
+        const user = {
+            id: generateUUID(),
+            nameMember: casual.username,
+            email: casual.email,
+            password: hashPassword(casual.password),
+            birthday: casual.date((format = "YYYY-MM-DD")),
+            acceptedTOS: true,
+            validated: casual.boolean,
+            role: roles[randomizador],
+        };
+        const db = getConnection();
+        await saveUser(user);
 
-saveUser(user);
+        console.log("Usuario creado con exito");
+        console.log("usuarios: ", users);
+        const users = await getAllUsers();
+
+        db.end();
+    } catch (error) {
+        console.error("no se puedo crear el usuario: ", error);
+    }
+}
+
+createUser();
+

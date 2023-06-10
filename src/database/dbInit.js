@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS Votes(
 );`);
 }
 
-initDB();
+initDB().catch(console.error);
 
 // async function generateFakeUsers(pool) {
 //     const [users, posts] = await generateUsersAndPosts();

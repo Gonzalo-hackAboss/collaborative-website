@@ -12,7 +12,7 @@ module.exports = {
         const fileName = `${photoId}.webp`;
         const filePath = path.join(directory, fileName);
 
-        const processedImage = sharp(photoFile.data).resize(720).webp();
+        const processedImage = sharp(photoFile.data).resize({width: 720}).webp();
         await processedImage.toFile(filePath);
 
         const fileURL = `/photos/${postId}/${fileName}`;
@@ -29,3 +29,5 @@ module.exports = {
         await fs.rm(directory, { recursive: true, force: true });
     },
 };
+
+

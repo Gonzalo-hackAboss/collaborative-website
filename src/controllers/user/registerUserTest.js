@@ -1,7 +1,7 @@
 "use strict";
 const registerUser = require("./registerUser.js");
 const dbService = require("../../services/dbService.js");
-const errorService = require("../../services/errorService.js");
+
 
 (async () => {
     const result = await registerUser({
@@ -11,7 +11,9 @@ const errorService = require("../../services/errorService.js");
         country: "Spain",
         acceptedTOS: true,
     });
-    if (!result) {
-        return errorService.invalidCredentials, dbService();
+
+    if (result) {
+        return dbService.errorService.invalidCredentials;
     }
 })();
+
