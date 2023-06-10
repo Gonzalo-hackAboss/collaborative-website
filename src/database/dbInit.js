@@ -1,9 +1,8 @@
 "use strict";
 
 require("dotenv").config();
-
-const hashpassword = require("../../services/cryptoServices.js");
 const { getConnection } = require("../database/mysqlConnection.js");
+const { hashPassword } = require("../services/cryptoServices.js");
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
