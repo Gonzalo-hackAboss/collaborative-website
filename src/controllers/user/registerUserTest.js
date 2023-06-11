@@ -2,7 +2,6 @@
 const registerUser = require("./registerUser.js");
 const dbService = require("../../services/dbService.js");
 
-
 (async () => {
     const result = await registerUser({
         email: "anai@test.com",
@@ -16,4 +15,3 @@ const dbService = require("../../services/dbService.js");
         return dbService.errorService.invalidCredentials;
     }
 })();
-
