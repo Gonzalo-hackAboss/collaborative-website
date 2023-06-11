@@ -19,7 +19,11 @@ async function createUser() {
             validated: casual.boolean,
             role: roles[randomizador],
         };
-        await saveUser(user);
+
+
+        const db = getConnection();
+        await saveUser(db, user);
+
 
         console.log("Usuario creado con exito");
         console.log("usuarios: ", users);

@@ -24,9 +24,11 @@ module.exports = async (userData) => {
         };
     }
 
+
     if (await getUserByEmail(userData.email)) {
         errorService.emailAlreadyRegistered;
     }
+
 
     // Se hashea la contraseña
     const hashedPassword = await hashPassword(userData.password);

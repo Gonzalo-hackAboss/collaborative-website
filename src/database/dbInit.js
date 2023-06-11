@@ -115,4 +115,7 @@ async function createDatabaseTables(pool) {
 	   
 }
 
+
 initDB();
+
+
