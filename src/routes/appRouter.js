@@ -7,7 +7,7 @@ const userRouter = require("./userRouter.js");
 
 const router = Router();
 
-router.use(userRouter);
-router.use(postsRouter);
+router.use("/users", userRouter);
+router.use("/posts", postsRouter);
 
 module.exports = router;
