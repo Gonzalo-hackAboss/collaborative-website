@@ -1,4 +1,7 @@
 
+"use strict";
+
+
 const mysql2 = require("mysql2/promise");
 
 //Singleton
@@ -22,7 +25,7 @@ function getConnection() {
     }
     return pool;
 }
-ç
+
 
 
 module.exports = {

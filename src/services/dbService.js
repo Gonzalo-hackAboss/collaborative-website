@@ -5,13 +5,14 @@ const { getConnection } = require("../database/mysqlConnection.js");
 const db = getConnection();
 
 module.exports = {
-    async saveUser(user) {
-        const statement = `
-        INSERT INTO Users(id, nameMember, email, password, birthDate, acceptedTOS, validated)
-        VALUES(?, ?, ?, ?, ?, ?, ?)
+  async saveUser(db, user) {
+      const statement = `
+          INSERT INTO Users(id, nameMember, email, password, birthDate, acceptedTOS, validated)
+          VALUES(?, ?, ?, ?, ?, ?, ?)
       `;
-        await db.execute(statement, Object.values(user));
-    },
+      await db.execute(statement, Object.values(user));
+  },
+
 
     async getUserByEmail(email) {
         const statement = `
