@@ -5,7 +5,6 @@ const { getConnection } = require("../database/mysqlConnection.js");
 const db = getConnection();
 
 module.exports = {
-
     async saveUser(user) {
         const statement = `
         INSERT INTO Users(id, nameMember, email, password, birthday, acceptedTOS, validated)
@@ -21,7 +20,6 @@ module.exports = {
             user.validated,
         ]);
     },
-
 
     // El array se puede sustituir como Object.values(user) como estaba antes, pero estoy haciendo pruebas.
 
@@ -96,7 +94,7 @@ module.exports = {
 
     async savePost(post) {
         const statement = `
-        INSERT INTO posts(id, userId, title, description)
+        INSERT INTO posts(id, idUser, title, description)
         VALUES(?, ?, ?, ?)
       `;
         await db.execute(statement, Object.values(post));
