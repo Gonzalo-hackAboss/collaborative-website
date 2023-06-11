@@ -28,7 +28,7 @@ async function loginUser(email, password) {
         throw errorService.emailNotValidated();
     }
 
-    const passwordMatch = await cryptoServices.validatePasswords(
+    const passwordMatch = await cryptoServices.validatePassword(
         password,
         user.password
     );
