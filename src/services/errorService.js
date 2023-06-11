@@ -15,6 +15,13 @@ module.exports = {
         throw error;
     },
 
+    emailAlreadyRegistered: () => {
+        const error = new Error("Email already registered");
+        error.status = 400;
+        error.code = "EMAIL_ALREADY_REGISTERED";
+        throw error;
+    },
+
     didNotAcceptTOS: () => {
         const error = new Error(
             "The user must accept the terms and conditions to register"

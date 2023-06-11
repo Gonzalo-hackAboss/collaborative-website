@@ -5,9 +5,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+
+    /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
+
     async hashPassword(plainPassword) {
+        console.log("password plain: ", plainPassword);
         return await bcrypt.hash(plainPassword, 10);
     },
+
     async validatePassword(plainPassword, hash) {
         return await bcrypt.compare(plainPassword, hash);
     },
@@ -17,6 +22,9 @@ module.exports = {
         return code;
     },
 
+
+    /*Generar un identificador único*/
+n
     generateUUID() {
         return crypto.randomUUID();
     },

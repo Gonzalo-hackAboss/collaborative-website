@@ -1,39 +1,43 @@
-"use strict";
-
-const nodemailer = require("nodemailer");
-
-let senderEmail = "";
-let senderPassword = "";
-
-// Configuración del transporte de correo electrónico
-const transporter = nodemailer.createTransport({
-    service: "SMTP", // especificar (Gmail, Outlook, etc.)
-    auth: {
-        user: senderEmail,
-        pass: senderPassword,
-    },
-});
+const mailjet = require("node-mailjet").apiConnect(
+    process.env.MJ_APIKEY_PUBLIC,
+    process.env.MJ_APIKEY_PRIVATE
+);
 
 module.exports = {
-    setSenderCredentials(email, password) {
-        senderEmail = email;
-        senderPassword = password;
-        transporter.options.auth.user = senderEmail; 
-        transporter.options.auth.pass = senderPassword;
+    async sendEmail(to, toName, subject, message) {
+        await mailjet.post("send", { version: "v3.1" }).request({
+            Messages: [
+                {
+                    From: {
+                        Email: process.env.MAIL_SENDER_FROM,
+                        Name: process.env.MAIL_SENDER_NAME,
+                    },
+                    To: [
+                        {
+                            Email: to,
+                            Name: toName,
+                        },
+                    ],
+                    Subject: subject,
+                    HTMLPart: message,
+                },
+            ],
+        });
     },
-    async sendValidationEmail(validationCode, recipientEmail) {
-        try {
-            const mailOptions = {
-                from: senderEmail,
-                to: recipientEmail,
-                subject: "Validación de correo electrónico",
-                text: `Es necesario que valides tu correo electrónico con el código: ${validationCode}`,
-            };
 
-            const result = await transporter.sendMail(mailOptions);
-            console.log("Correo electrónico enviado:", result);
-        } catch (error) {
-            console.error("Error al enviar el correo electrónico:", error);
-        }
+    async sendValidationEmail(email, nameMember, validationCode) {
+        await module.exports.sendEmail(
+            email,
+            nameMember,
+            "Colaborative Website - Código de validación",
+            `<h1>Bienvenido a Colaborative Website</h1>
+            Querido ${nameMember}, para poder utilizar todos los servicios de Colaborative Website debe validar su email con el siguiente código:
+            </br>
+            <h2>${validationCode}</h2>
+            </br>
+            Un cordial saludo.
+            Colaborative Website
+            `
+        );
     },
 };
