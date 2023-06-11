@@ -20,31 +20,49 @@ const router = Router();
  ****    POSTS   ****
  */
 
+router.get(
+    "/posts",
+    handleAsyncError(async (req, res) => {
+        const posts = await listPosts();
+        sendResponse(res, posts);
+    })
+);
 
- router.get("/posts", handleAsyncError(async (req, res) => {
-    const posts = await listPosts();
-    sendResponse(res, posts);
-}));
+router.get(
+    "/posts/search-post-categories",
+    handleAsyncError(async (req, res) => {
+        const search = await searchByCategory();
+        sendResponse(res, search);
+    })
+);
 
-router.get("/posts/search-post-categories", handleAsyncError(async (req, res) => {
-    const search = await searchByCategory();
-    sendResponse(res, search);
-}));
+router.get(
+    "/posts/:id",
+    handleAsyncError(async (req, res) => {
+        const post = await viewPostDetail(req.params.id);
+        sendResponse(res, post);
+    })
+);
 
-router.get("/posts/:id", handleAsyncError(async (req, res) => {
-    const post = await viewPostDetail(req.params.id);
-    sendResponse(res, post);
-}));
+router.post(
+    "/posts",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        await createPost(req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201);
+    })
+);
 
-router.post("/posts", authGuard, json(), handleAsyncError(async (req, res) => {
-    await createPost(req.currentUser.id, req.body);
-    sendResponse(res, undefined, 201);
-}));
-
-router.post("/posts/:id/comments", authGuard, json(), handleAsyncError(async (req, res) => {
-    await addComment(req.params.id, req.currentUser.id, req.body);
-    sendResponse(res, undefined, 201);
-}));
+router.post(
+    "/posts/:id/comments",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        await addComment(req.params.id, req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201);
+    })
+);
 /*
  **** VOTOS  ***
  */
