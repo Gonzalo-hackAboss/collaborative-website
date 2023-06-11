@@ -25,7 +25,7 @@ module.exports = async (userData) => {
     }
     // Se hashea la contraseña
 
-    const hashedPassword = cryptoServices.hashPassword(userData.password);
+    const hashedPassword = hashPassword(userData.password);
 
    
 

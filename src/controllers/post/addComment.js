@@ -1,6 +1,6 @@
 "use strict";
 
-const { generateUUID } = require("../../services/cryptoServices.js");
+const { generateUUID } = require("../../services/cryptoServices");
 const {
     checkUserPermission,
     saveComment,
