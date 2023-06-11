@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-
     /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
 
     async hashPassword(plainPassword) {
@@ -22,9 +21,8 @@ module.exports = {
         return code;
     },
 
-
     /*Generar un identificador único*/
-n
+
     generateUUID() {
         return crypto.randomUUID();
     },
@@ -42,5 +40,4 @@ n
             return null;
         }
     },
-
 };
