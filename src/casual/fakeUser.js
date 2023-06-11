@@ -5,6 +5,8 @@ const { saveUser } = require("../services/dbService");
 const roles = ["Usuario", "Administrador", "Moderador", "VIP"];
 const randomizador = Math.floor(Math.random() * roles.length);
 
+const db = getConnection();
+
 async function createUser() {
     try {
         const user = {
@@ -17,7 +19,6 @@ async function createUser() {
             validated: casual.boolean,
             role: roles[randomizador],
         };
-        const db = getConnection();
         await saveUser(user);
 
         console.log("Usuario creado con exito");
@@ -31,4 +32,3 @@ async function createUser() {
 }
 
 createUser();
-

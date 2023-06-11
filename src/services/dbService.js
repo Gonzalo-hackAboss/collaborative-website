@@ -7,11 +7,21 @@ const db = getConnection();
 module.exports = {
     async saveUser(user) {
         const statement = `
-        INSERT INTO Users(id, nameMember, email, password, birthDate, acceptedTOS, validated)
+        INSERT INTO Users(id, nameMember, email, password, birthday, acceptedTOS, validated)
         VALUES(?, ?, ?, ?, ?, ?, ?)
       `;
-        await db.execute(statement, Object.values(user));
+        await db.execute(statement, [
+            user.id,
+            user.nameMember,
+            user.email,
+            user.password,
+            user.birthday,
+            user.acceptedTOS,
+            user.validated,
+        ]);
     },
+
+    // El array se puede sustituir como Object.values(user) como estaba antes, pero estoy haciendo pruebas.
 
     async getUserByEmail(email) {
         const statement = `
@@ -25,35 +35,36 @@ module.exports = {
     },
 
     async getEnabledUsers() {
-      const statement = `
+        const statement = `
         SELECT *
         FROM users
         WHERE emailValidated = true
       `;
-      const [rows] = await db.execute(statement);
-  
-      return rows;
+        const [rows] = await db.execute(statement);
+
+        return rows;
     },
 
     async saveValidationCode(code) {
+        console.log(code);
         const statement = `
-        INSERT INTO validation_codes(id, userId, code)
+        INSERT INTO Validation(id, idUser, code)
         VALUES(?, ?, ?)
       `;
-        await db.execute(statement, Object.values(code));
+        await db.execute(statement, [code.id, code.idUser, code.code]);
     },
 
     async getAllUsers() {
-      try {
-          const db = getConnection();
-          const query = "SELECT * FROM users";
-          const [rows] = await db.query(query);
-          db.end();
-          return rows;
-      } catch (error) {
-          throw error;
-      }
-  },
+        try {
+            const db = getConnection();
+            const query = "SELECT * FROM users";
+            const [rows] = await db.query(query);
+            db.end();
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     async getAllPosts() {
         const statement = `
@@ -90,12 +101,12 @@ module.exports = {
     },
 
     async updatePost(post) {
-      const statement = `
+        const statement = `
         UPDATE posts
         SET title = ?, description = ?
         WHERE id = ?
       `;
-      await db.execute(statement, [post.title, post.description, post.id]);
+        await db.execute(statement, [post.title, post.description, post.id]);
     },
 
     async getPostById(postId) {
@@ -127,7 +138,6 @@ module.exports = {
       `;
         await db.execute(statement, Object.values(postComment));
     },
-
 
     // TRAIGO AQUI EL CONTENIDO DE searchCategory.js y dejo en ese archivo solo el
     async searchByCategory(searchTerm, categoryNameArray) {
@@ -184,7 +194,7 @@ module.exports = {
         SET comment = ?
         WHERE id = ?
       `;
-        await db.execute(statement, [commentPayload.comment, commentId]);  
+        await db.execute(statement, [commentPayload.comment, commentId]);
     },
 
     async deleteComment(commentId) {
