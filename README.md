@@ -51,11 +51,10 @@ También utilizamos middlewares de autorización para restringir el acceso a cie
 
 ### 3. Gestión de errores:
 
-Aquí también hemos utilizado middlewares, personalizando los errores, según el caso.
-
 ## Detalles de nuestro código
 
 Lista de archivos:
+"
 
 ### Controllers:
 
