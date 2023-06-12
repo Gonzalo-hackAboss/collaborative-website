@@ -1,23 +1,21 @@
 "use strict";
 
 const jwt = require("jsonwebtoken");
-
 const { getConnection } = require("../../database/mysqlConnection.js");
-
 const validateToken = require("../../middlewares/validateToken");
-
 const {
     validatePassword,
     generateJWT,
 } = require("../../services/cryptoServices.js");
 const { invalidCredentials } = require("../../services/errorService.js");
 
-async function loginUser(data, email) {
+async function loginUser(data) {
+    console.log(data);
     const pool = getConnection();
     console.log("email: ", data.email);
     console.log("pass: ", data.password);
     if (!data.email || !data.password) {
-        console.log("email o password mal");
+        console.log("email o password mal (primera validacion)");
         throw invalidCredentials();
     }
 
@@ -52,14 +50,21 @@ async function loginUser(data, email) {
     console.log("generando Token");
 
     const token = generateJWT(data);
-    const secretKey = process.env.JWT_SECRET; // llama .env con clave secreta
+    const secretKey = process.env.JWT_SECRET;
 
     console.log("token: ", token);
-    const decodedToken = validateToken(token, secretKey);
 
-    if (decodedToken === null) {
-        throw notAuthenticated();
-    }
+    // const decodedToken = validateToken(token, secretKey);
+
+    // if (decodedToken === null) {
+    //     throw notAuthenticated();
+    // }
+
+    return {
+        success: true,
+        token: token, // Añade el token en la respuesta
+        message: "Usuario autenticado correctamente",
+    };
 }
 
 module.exports = loginUser;
