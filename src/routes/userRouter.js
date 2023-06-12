@@ -31,12 +31,8 @@ router.post("/users/register", json(), async (req, res) => {
 // });
 
 router.post("/users/login", json(), async (req, res) => {
-    try {
-        const token = await loginUser(req.body);
-        sendResponse(res, { token });
-    } catch (error) {
-        sendError(res, error);
-    }
+    const token = await loginUser(req.body);
+    sendResponse(res, { token });
 });
 
 router.get("/users/:id", authGuard, (req, res) => {

@@ -20,9 +20,9 @@ module.exports = {
             user.validated,
         ]);
     },
-
     // El array se puede sustituir como Object.values(user) como estaba antes, pero estoy haciendo pruebas.
 
+    // unsafe???
     async getUserByEmail(email) {
         const statement = `
         SELECT *
@@ -69,24 +69,12 @@ module.exports = {
     async getAllPosts() {
         const statement = `
         SELECT
-          p.id,
-          p.userId,
-          p.title,
-          p.description,
-          COALESCE(l.like_count, 0) AS likes,
-          COALESCE(c.comment_count, 0) AS comments
+          id,
+          idUser,
+          title,
+          description,
         FROM
-          posts p
-          LEFT JOIN (
-            SELECT postId, COUNT(*) AS like_count
-            FROM post_likes
-            GROUP BY postId
-          ) l ON p.id = l.postId
-          LEFT JOIN (
-            SELECT postId, COUNT(*) AS comment_count
-            FROM post_comments
-            GROUP BY postId
-          ) c ON p.id = c.postId
+          Posts
       `;
         const [rows] = await db.execute(statement);
         return rows;
