@@ -30,20 +30,16 @@ module.exports = {
 
     generateJWT(payload) {
         return jwt.sign(payload, process.env.JWT_SECRET, {
-
-
             expiresIn: "10d",
-
         });
     },
 
     parseJWT(token) {
         console.log("token en el PARSE crypto: ", token);
         try {
-
             const payload = jwt.verify(token, process.env.JWT_SECRET);
-            return payload;
-
+            console.log("Payload: ", payload);
+            return { ...payload, token }; // Incluir el token en el objeto payload
         } catch {
             return null;
         }

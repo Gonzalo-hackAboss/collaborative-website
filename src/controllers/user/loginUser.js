@@ -7,22 +7,23 @@ const {
     validatePassword,
     generateJWT,
 } = require("../../services/cryptoServices.js");
-const { invalidCredentials } = require("../../services/errorService.js");
+const {
+    invalidCredentials,
+    notAuthenticated,
+} = require("../../services/errorService.js");
 
 async function loginUser(data) {
-    console.log(data);
     const pool = getConnection();
-    console.log("email: ", data.email);
-    console.log("pass: ", data.password);
+
     if (!data.email || !data.password) {
         console.log("email o password mal (primera validacion)");
         throw invalidCredentials();
     }
 
-    const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
-        data.email,
-        console.log("otra vez: ", data.email),
-    ]);
+    const [rows] = await pool.query(
+        "SELECT id, role FROM Users WHERE email = ?",
+        [data.email]
+    );
 
     console.log("row", rows);
     if (rows.length === 0) {
@@ -34,25 +35,17 @@ async function loginUser(data) {
     //     throw errorService.emailNotValidated();
     // }
 
-    console.log("a ver si el password se valida");
-    console.log(rows[0].password);
     const passwordMatch = await validatePassword(
         data.password,
         rows[0].password
     );
-    console.log("ha llegado hasta aqui");
 
     if (!passwordMatch) {
-        console.log("No matchea el pass");
         throw invalidCredentials();
     }
-    console.log("Todo OK");
-    console.log("generando Token");
 
-    const token = generateJWT(data);
-    const secretKey = process.env.JWT_SECRET;
-
-    console.log("token: ", token);
+    const token = generateJWT(rows[0]);
+    // const secretKey = process.env.JWT_SECRET;
 
     // const decodedToken = validateToken(token, secretKey);
 

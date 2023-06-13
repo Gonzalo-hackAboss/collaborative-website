@@ -1,13 +1,14 @@
 const validateToken = require("../../middlewares/validateToken.js");
-const generateUUID = require("../../services/cryptoServices.js");
+const { generateUUID, parseJWT } = require("../../services/cryptoServices.js");
 const { savePost } = require("../../services/dbService.js");
 const sendError = require("../../utils/sendError.js");
 
-module.exports = async (data, token) => {
+module.exports = async (data, token, res) => {
     try {
-        const payload = parseJWT(token);
-        const user = payload.userId;
+        const user = parseJWT(token);
+
         console.log("user: ", user);
+
         if (!user) {
             throw new Error("Usuario no autenticado");
         }
@@ -25,7 +26,7 @@ module.exports = async (data, token) => {
             id: generateUUID(),
             idUser: user.id,
             title,
-            description,
+            description: description,
         };
         await savePost(newPost);
 
@@ -35,6 +36,5 @@ module.exports = async (data, token) => {
         };
     } catch (error) {
         sendError(res, error);
-        console.log(error);
     }
 };
