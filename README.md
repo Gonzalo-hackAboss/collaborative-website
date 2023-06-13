@@ -1,8 +1,49 @@
 # collaborative-website
 
-## Descripción del proyecto
-
 Este proyecto busca crear una plataforma de noticias colaborativas, dónde los usuarios puedan compartir y participar en la difusión de información sobre diversos temas. Los usuarios anónimos tienen acceso limitado a las funcionalidades, mientras que los usuarios registrados pueden contribuir con noticias y gestionar su perfil de usuario.
+
+-   [Objetivo del Proyecto](#objetivo-del-proyecto)
+-   [Objetivos adicionales](#bjetivos-adicionales)
+
+-   [Diseño](#dise%C3%B1o) pendiente
+-   [Diagrama de la DB](#diagrama-de-la-db) pendiente
+
+-   [Instalación](#instalaci%C3%B3n)
+-   [Ejecución](#ejecuci%C3%B3n)
+
+## Objetivo del Proyecto:
+
+-   [ ] Los usuarios anónimos se pueden registrar
+-   [ ] Los usuarios anónimos se pueden loguear
+-   [ ] Los usuarios anónimos pueden visualilzar la lista de las últimas noticias listado con título, tema, entradilla y foto
+-   [ ] Los usuarios anónimos pueden visualizar una única noticia completa
+
+-   [ ] Los usuarios registrados se pueden registrar
+-   [ ] Los usuarios registrados se pueden loguear
+-   [ ] Los usuarios registrados pueden visualilzar todo el contenido de la api
+
+-   [ ] Los usuarios registrados pueden publicar una nueva noticia:
+
+              [ ] Título
+              [ ] Entradilla
+              [ ] Texto de la noticia
+              [ ] Tema
+
+-   [ ] Los usuarios registrados pueden editar una noticia publicada por el propio usuario
+-   [ ] Los usuarios pueden eliminar una noticia publicada por el propio usuario
+
+## Objetivos adicionales:
+
+-   [ ] Los usuarios anónimos pueden filtrar las noticias por tema
+        Los usuarios registrados pueden
+
+          [ ] publicar fotos en cada noticia que hayan publicado
+          [ ] gestionar su perfil de usuario
+          [ ] votar positiva o negativamente noticias de otros usuarios
+
+---
+
+O ASÍ: --------------
 
 ### - Características de los usuarios anónimos:
 
@@ -32,9 +73,33 @@ Los usuarios registrados tienen todas las funcionalidades de los usuarios anóni
 
 ---
 
-## Funcionalidades:
+---
 
-### 1. Utilización de módulos:
+## Diseño
+
+![Collaborative Website](
+RUTA DEL ARCHIVO)
+
+## Diagrama de la DB
+
+![Collaborative Website DB](
+RUTA DEL ARCHIVO)
+
+---
+
+## Instalación
+
+```bash
+npm install
+```
+
+## Ejecución
+
+```bash
+npm start
+```
+
+## Explicaciones
 
 Facilitan la división del proyecto en partes más pequeñas y manejables, permitiéndonos trabajar de forma simultánea en diferentes módulos sin interferir entre nosotros.
 
@@ -44,34 +109,23 @@ Permiten definir interfaces claras mediante el encapsulamiento u ocultamiento de
 
 Se pueden realizar modificaciones en partes específicas de la aplicación sin afectar a otras áreas.
 
-### 2. Autenticación y autorización:
-
-Implementamos un sistema de autenticación basado en tokens JWT (JSON Web Tokens) para permitir que los usuarios inicien sesión y accedan a las funcionalidades exclusivas de los usuarios registrados.
-También utilizamos middlewares de autorización para restringir el acceso a ciertas rutas y acciones según el rol del usuario.
-
-### 3. Gestión de errores:
-
 ## Detalles de nuestro código
 
-Lista de archivos:
-"
+```js
+module.exports = (res, error) => {
+    const status = error.status  500;
+    const code = error.code  "UNEXPECTED_ERROR";
+    const msg = error.message || "¡Ha ocurrido un error inesperado!";
 
-### Controllers:
-
-**addComment.js**: Controlador que maneja la lógica para agregar comentarios a los posts.
-
-**addPhoto.js**: Controlador para agregar fotos a los posts.
-
-**createPost.js**: Controlador esencial para crear nuevos posts.
-...
-
-## Services:
-
-**cryptoServices.js**: Servicio para operaciones de cifrado.
-
-**dbService.js**: Servicio para interactuar con la base de datos.
-
-**emailService.js**: Servicio para enviar correos electrónicos.
+    res.status(status).json({
+        success: false,
+        error: {
+            code: code,
+            msg: msg,
+        },
+    });
+};
+```
 
 ## Detalles técnicos de la implementación:
 
@@ -81,29 +135,41 @@ La API de nuestra web de noticias colaborativas está construida utilizando las 
 
 -   Framework de desarrollo: Hemos optado por Express.js como framework de servidor web para manejar las rutas, la lógica de negocio y las solicitudes HTTP.
 
+-   Sistema de autenticación basado en tokens JWT (JSON Web Tokens) para permitir que los usuarios inicien sesión y accedan a las funcionalidades exclusivas de los usuarios registrados.
+
+-   Middlewares de autorización para restringir el acceso a ciertas rutas y acciones según el rol del usuario.
+
 -   Base de datos: Utilizamos como base de datos relacional MySQL para almacenar la información de los usuarios, noticias y temas.
 
-.
+-   Pruebas con Insomnia: Hemos realizado pruebas manuales y exploratorias, en lugar de escribir pruebas automatizadas. Así hemos podido probar la API de forma interactiva, enviando solicitudes HTTP y verificando manualmente las respuestas.
+    .
+
+## Detalles de nuestro código
+
+Listado de archivos:
+
+### Controllers:
+
+**addComment.js**: Controlador que maneja la lógica para agregar comentarios a los posts.
+
+**addPhoto.js**: Controlador para agregar fotos a los posts.
+
+**createPost.js**: Controlador esencial para crear nuevos posts.
+
+### Services:
+
+**cryptoServices.js**: Servicio para operaciones de cifrado.
+
+**dbService.js**: Servicio para interactuar con la base de datos.
+
+**emailService.js**: Servicio para enviar correos electrónicos.
+
+------------- Sigo detallando?
 .
 
-[//]:<> ( ORM (Object-Relational Mapping) como Sequelize se utiliza para interactuar con la base de datos.)
+-   Plataforma de alojamiento Netlify: **https://c011a80rati83-w38sit3.netlify.app/**
 
-.
-.
-
-.
-.
-
-[//]:<> ( - Almacenamiento de archivos: Para permitir a los usuarios cargar imágenes para sus noticias, ¿¿¿¿¿ utilizamos servicios de almacenamiento en la nube como AWS S3 o Firebase Storage.------------------------- Los archivos se guardan y gestionan en el almacenamiento en la nube, mientras que la URL de la imagen se almacena en la base de datos.)
-
-.
-.
-
--   Pruebas con Insomnia:
-
-Hemos realizado pruebas manuales y exploratorias, en lugar de escribir pruebas automatizadas. Así hemos podido probar la API de forma interactiva, enviando solicitudes HTTP y verificando manualmente las respuestas.
-
--   Plataforma de alojamiento Netlify:
+------------- LO DEJO O LO QUITO:
 
 Nuestra aplicación web estática se despliega y aloja en Netlify, una plataforma especializada en el alojaminento y despliegue de aplicaciones web estáticas y JAMstack (JavaScript, API y Markup).
 
@@ -123,5 +189,5 @@ Estos son solo algunos de los detalles técnicos clave de la implementación de 
 
      Juan León Medina,
      Gonzalo Rodriguez Aquino,
-     Asier .... .... .... y
+     Asier Bikandi Escuza y
      Ana Isabel Navarro Gómez.

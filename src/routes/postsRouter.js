@@ -14,6 +14,8 @@ const sendResponse = require("../utils/sendResponse.js");
 const listPosts = require("../controllers/post/listPosts.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
 
+const loginUser = require("../routes/postsRouter.js");
+
 const router = Router();
 
 /*
@@ -81,14 +83,15 @@ router.post("/posts/:id/votes", async (req, res) => {
 module.exports = router;
 
 /* Acceder al Buscador, revisar cómo implementarlo */
-// router.get(
-//     "/posts/search",
-//     handleAsyncError(async (req, res) => {
-//         //Obtener todos los posts
-//         const posts = await searchPosts(req.query);
-//         sendResponse(res, posts);
-//     })
-// );
+router.get(
+    "/posts/search",
+    handleAsyncError(async (req, res) => {
+        //Obtener todos los posts
+        const posts = await searchPosts(req.query);
+        sendResponse(res, posts);
+        console.log("search");
+    })
+);
 
 //router.post(
 //   "/posts/:id/like",
