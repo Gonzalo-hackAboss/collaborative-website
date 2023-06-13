@@ -25,7 +25,7 @@ module.exports = async (userData) => {
     }
 
     if (await getUserByEmail(userData.email)) {
-        errorService.emailAlreadyRegistered;
+        return errorService.emailAlreadyRegistered;
     }
 
     // Se hashea la contraseña

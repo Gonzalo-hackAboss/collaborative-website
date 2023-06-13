@@ -85,7 +85,12 @@ module.exports = {
         INSERT INTO posts(id, idUser, title, description)
         VALUES(?, ?, ?, ?)
       `;
-        await db.execute(statement, Object.values(post));
+        await db.execute(statement, [
+            post.id,
+            post.idUser,
+            post.title,
+            post.description,
+        ]);
     },
 
     async updatePost(post) {

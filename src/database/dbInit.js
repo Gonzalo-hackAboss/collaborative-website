@@ -111,11 +111,6 @@ async function createDatabaseTables(pool) {
         FOREIGN KEY (idUser) REFERENCES Users (id),
         FOREIGN KEY (idPost) REFERENCES Posts (id)
     );`);
-
-	   
 }
 
-
 initDB();
-
-

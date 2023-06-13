@@ -17,12 +17,3 @@ module.exports = (res, error) => {
         },
     });
 };
-
-/* 
-AÑADIR POSTERIORMENTE A APP.JS
-app.use ((err, req, res, next) => {
-    sendError(res, err);
-})
-
-IMPORTANTE hacer que SendError llame al archivo y lo requiera
-*/
