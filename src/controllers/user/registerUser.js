@@ -16,6 +16,7 @@ const {
     sendValidationEmail,
 } = require("../../services/emailService.js");
 
+
 module.exports = async (userData) => {
     if (!userData.acceptedTOS) {
         return {

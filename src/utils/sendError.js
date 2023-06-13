@@ -1,8 +1,5 @@
-/**
- * Gestión de Errores inesperados
- * Recibe el status o el error 500
- * ** El Error 500 hace referencia a INTERNAL SERVER ERROR (Error)
- */
+'use strict'
+
 
 module.exports = (res, error) => {
     const status = error.status || 500;

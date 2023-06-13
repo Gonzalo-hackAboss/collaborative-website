@@ -68,16 +68,22 @@ module.exports = {
 
     async getAllPosts() {
         const statement = `
-        SELECT
-          id,
-          idUser,
-          title,
-          description,
+        SELECT *
         FROM
           Posts
       `;
         const [rows] = await db.execute(statement);
         return rows;
+    },
+
+    async getPostById(postId) {
+        const statement = `
+      SELECT *
+      FROM Posts
+      WHERE id = ?
+    `;
+        const [rows] = await db.execute(statement, [postId]);
+        return rows[0];
     },
 
     async savePost(post) {
@@ -100,17 +106,6 @@ module.exports = {
         WHERE id = ?
       `;
         await db.execute(statement, [post.title, post.description, post.id]);
-    },
-
-    async getPostById(postId) {
-        const statement = `
-        SELECT *
-        FROM posts as p
-        WHERE p.id = ?
-      `;
-        const [rows] = await db.execute(statement, [postId]);
-
-        return rows[0];
     },
 
     async getCommentsByPostId(postId) {

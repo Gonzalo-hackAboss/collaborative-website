@@ -8,8 +8,11 @@ revisando .env y conex, db
  */
 require("dotenv").config();
 
+'use strict'
+
 const loginUser = require("./loginUser.js");
 const dbService = require("../../services/dbService.js");
+
 
 async function testLoginUser() {
     try {

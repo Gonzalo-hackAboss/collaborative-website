@@ -1,7 +1,10 @@
+'use strict'
+
 const mailjet = require("node-mailjet").apiConnect(
     process.env.MJ_APIKEY_PUBLIC,
     process.env.MJ_APIKEY_PRIVATE
 );
+
 
 module.exports = {
     async sendEmail(to, toName, subject, message) {

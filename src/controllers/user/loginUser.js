@@ -16,16 +16,13 @@ async function loginUser(data) {
     const pool = getConnection();
 
     if (!data.email || !data.password) {
-        console.log("email o password mal (primera validacion)");
         throw invalidCredentials();
     }
 
-    const [rows] = await pool.query(
-        "SELECT id, role FROM Users WHERE email = ?",
-        [data.email]
-    );
+    const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
+        data.email,
+    ]);
 
-    console.log("row", rows);
     if (rows.length === 0) {
         throw invalidCredentials();
     }

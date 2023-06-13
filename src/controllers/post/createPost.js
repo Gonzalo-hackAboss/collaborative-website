@@ -1,3 +1,5 @@
+"use strict";
+
 const validateToken = require("../../middlewares/validateToken.js");
 const { generateUUID, parseJWT } = require("../../services/cryptoServices.js");
 const { savePost } = require("../../services/dbService.js");
@@ -5,6 +7,8 @@ const sendError = require("../../utils/sendError.js");
 
 module.exports = async (data, token, res) => {
     try {
+        console.log("data: ", data);
+        console.log("token: ", token);
         const user = parseJWT(token);
 
         console.log("user: ", user);
