@@ -13,6 +13,7 @@ const authGuard = require("../middlewares/authGuard.js");
 const sendResponse = require("../utils/sendResponse.js");
 const listPosts = require("../controllers/post/listPosts.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
+const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.get("/posts/search-post-categories", handleAsyncError(async (req, res) =>
 }));
 
 router.get("/posts/:id", handleAsyncError(async (req, res) => {
-    const post = await viewPostDetail(req.params.id);
+    const post = await viewPostDetails(req.params.id);
     sendResponse(res, post);
 }));
 
@@ -59,7 +60,7 @@ router.post("/posts/:id/votes", async (req, res) => {
 /*
  ****    POST    ****
  */
-
+router.get("/posts/:id", viewPostDetails);
 module.exports = router;
 
 /* Acceder al Buscador, revisar cómo implementarlo */
