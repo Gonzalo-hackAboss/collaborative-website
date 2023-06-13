@@ -1,50 +1,70 @@
 "use strict";
 
 const jwt = require("jsonwebtoken");
-
 const { getConnection } = require("../../database/mysqlConnection.js");
-const cryptoServices = require("../../services/cryptoServices.js");
 const validateToken = require("../../middlewares/validateToken");
-const errorService = require("../../services/errorService.js");
+const {
+    validatePassword,
+    generateJWT,
+} = require("../../services/cryptoServices.js");
+const { invalidCredentials } = require("../../services/errorService.js");
 
-async function loginUser(email, password) {
+async function loginUser(data) {
+    console.log(data);
     const pool = getConnection();
-
-    if (!email || !password) {
-        throw errorService.invalidCredentials();
+    console.log("email: ", data.email);
+    console.log("pass: ", data.password);
+    if (!data.email || !data.password) {
+        console.log("email o password mal (primera validacion)");
+        throw invalidCredentials();
     }
 
     const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
-        email,
+        data.email,
+        console.log("otra vez: ", data.email),
     ]);
 
+    console.log("row", rows);
     if (rows.length === 0) {
-        throw errorService.invalidCredentials();
+        throw invalidCredentials();
     }
 
-    const user = rows[0];
+    // if (!user.emailValidated) {
+    //     console.log("no validado");
+    //     throw errorService.emailNotValidated();
+    // }
 
-    if (!user.emailValidated) {
-        throw errorService.emailNotValidated();
-    }
-
-    const passwordMatch = await cryptoServices.validatePassword(
-        password,
-        user.password
+    console.log("a ver si el password se valida");
+    console.log(rows[0].password);
+    const passwordMatch = await validatePassword(
+        data.password,
+        rows[0].password
     );
+    console.log("ha llegado hasta aqui");
 
     if (!passwordMatch) {
-        throw errorService.invalidCredentials();
+        console.log("No matchea el pass");
+        throw invalidCredentials();
     }
+    console.log("Todo OK");
+    console.log("generando Token");
 
-    const token = generateJWT(user);
-    const secretKey = process.env.JWT_SECRET; // llama .env con clave secreta
+    const token = generateJWT(data);
+    const secretKey = process.env.JWT_SECRET;
 
-    const decodedToken = validateToken(token, secretKey);
+    console.log("token: ", token);
 
-    if (decodedToken === null) {
-        throw errorService.notAuthenticated();
-    }
+    // const decodedToken = validateToken(token, secretKey);
+
+    // if (decodedToken === null) {
+    //     throw notAuthenticated();
+    // }
+
+    return {
+        success: true,
+        token: token, // Añade el token en la respuesta
+        message: "Usuario autenticado correctamente",
+    };
 }
 
 module.exports = loginUser;

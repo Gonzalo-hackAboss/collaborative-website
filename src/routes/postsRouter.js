@@ -46,12 +46,27 @@ router.get(
     })
 );
 
+
+// router.post(
+//     "/posts",
+//     authGuard,
+//     json(),
+//     handleAsyncError(async (req, res) => {
+//         await createPost(req.currentUser.id, req.body);
+//         sendResponse(res, undefined, 201);
+//     })
+// );
+
+
 router.post(
     "/posts",
     authGuard,
     json(),
     handleAsyncError(async (req, res) => {
-        await createPost(req.currentUser.id, req.body);
+
+        const token = req.currentUser.token; // Obtiene el token de la propiedad token del objeto currentUser
+        await createPost(req.body, token); // Pasa el token en lugar del ID del usuario
+
         sendResponse(res, undefined, 201);
     })
 );

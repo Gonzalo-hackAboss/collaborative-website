@@ -30,17 +30,20 @@ module.exports = {
 
     generateJWT(payload) {
         return jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "5 days",
+
+
+            expiresIn: "10d",
+
         });
     },
 
     parseJWT(token) {
+        console.log("token en el PARSE crypto: ", token);
         try {
-            const userData = jwt.verify(
-                token, //TokenExpiredError,
-                process.env.JWT_SECRET
-            );
-            return userData;
+
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            return payload;
+
         } catch {
             return null;
         }

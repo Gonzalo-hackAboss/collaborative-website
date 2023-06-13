@@ -24,11 +24,9 @@ module.exports = async (userData) => {
         };
     }
 
-
     if (await getUserByEmail(userData.email)) {
         errorService.emailAlreadyRegistered;
     }
-
 
     // Se hashea la contraseña
     const hashedPassword = await hashPassword(userData.password);
@@ -61,10 +59,8 @@ module.exports = async (userData) => {
     console.log("email: ", user.email);
     await sendValidationEmail(user.email, user.nameMember, validationCode.code);
 
-    // Se envía mail
-    await sendValidationEmail();
-
     return {
         success: true,
+        message: "User registered",
     };
 };
