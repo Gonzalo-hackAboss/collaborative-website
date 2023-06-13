@@ -1,4 +1,7 @@
+'use strict'
+
 const { Router, json } = require("express");
+'use strict'
 
 const addComment = require("../controllers/post/addComment.js");
 const addPhoto = require("../controllers/post/addPhoto.js");
@@ -13,10 +16,14 @@ const authGuard = require("../middlewares/authGuard.js");
 const sendResponse = require("../utils/sendResponse.js");
 const listPosts = require("../controllers/post/listPosts.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
+const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 
-const loginUser = require("../routes/postsRouter.js");
+
+
 
 const router = Router();
+
+
 
 /*
  ****    POSTS   ****
@@ -41,7 +48,7 @@ router.get(
 router.get(
     "/posts/:id",
     handleAsyncError(async (req, res) => {
-        const post = await viewPostDetail(req.params.id);
+        const post = await viewPostDetail(req.params.id); // revisar
         sendResponse(res, post);
     })
 );
@@ -51,7 +58,15 @@ router.post(
     authGuard,
     json(),
     handleAsyncError(async (req, res) => {
-        await createPost(req.currentUser.id, req.body);
+        console.log("el usuario que llega al postRouter.js", req.currentUser);
+        console.log("el req.body: ", req.body);
+        if (!req.currentUser) {
+            throw new Error("INVALID_CREDENTIALS");
+        }
+
+        const token = req.currentUser.token; // Obtiene el token de la propiedad token del objeto currentUser
+
+        await createPost(req.body, token, res); // Pasa res como parámetro
         sendResponse(res, undefined, 201);
     })
 );
@@ -65,6 +80,9 @@ router.post(
         sendResponse(res, undefined, 201);
     })
 );
+
+router.get("/posts/:id", viewPostDetails);
+
 /*
  **** VOTOS  ***
  */
@@ -76,22 +94,18 @@ router.post("/posts/:id/votes", async (req, res) => {
     const idUser = req.user.id; // ID del usuario autenticado
 });
 
-/*
- ****    POST    ****
- */
 
 module.exports = router;
 
 /* Acceder al Buscador, revisar cómo implementarlo */
-router.get(
-    "/posts/search",
-    handleAsyncError(async (req, res) => {
-        //Obtener todos los posts
-        const posts = await searchPosts(req.query);
-        sendResponse(res, posts);
-        console.log("search");
-    })
-);
+// router.get(
+//     "/posts/search",
+//     handleAsyncError(async (req, res) => {
+//         //Obtener todos los posts
+//         const posts = await searchPosts(req.query);
+//         sendResponse(res, posts);
+//     })
+// );
 
 //router.post(
 //   "/posts/:id/like",
@@ -114,7 +128,17 @@ router.get(
 //     handleAsyncError(async (req, res) => {
 //         //Agregar una nueva foto al post con id req.params.id
 //         await addPhoto(req.params.id, req.currentUser.id, req.files.photo);
-
 //         sendResponse(res);
+//     })
+// );
+
+// ANTIGUO ROUTER POST A LA RUTA /POST
+// router.post(
+//     "/posts",
+//     authGuard,
+//     json(),
+//     handleAsyncError(async (req, res) => {
+//         await createPost(req.currentUser.id, req.body);
+//         sendResponse(res, undefined, 201);
 //     })
 // );

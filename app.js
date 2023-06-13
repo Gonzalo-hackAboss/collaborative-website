@@ -8,8 +8,10 @@ const morgan = require("morgan");
 const appRouter = require("./src/routes/appRouter.js");
 const sendError = require("./src/utils/sendError.js");
 
+
 const app = express();
 const PORT = 3000;
+
 
 app.use(express.json());
 app.use(fileUpload());
@@ -36,6 +38,8 @@ app.use((req, res) => {
         message: `Endpoint desconocido: ${req.method} ${req.path}`,
     });
 });
+
+
 
 app.listen(PORT, () => {
     console.log("Server iniciado en el puerto " + PORT);

@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+
 module.exports = {
     /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
     async hashPassword(plainPassword) {
@@ -30,17 +31,16 @@ module.exports = {
 
     generateJWT(payload) {
         return jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "5 days",
+            expiresIn: "10d",
         });
     },
 
     parseJWT(token) {
+        console.log("token en el PARSE crypto: ", token);
         try {
-            const userData = jwt.verify(
-                token, //TokenExpiredError,
-                process.env.JWT_SECRET
-            );
-            return userData;
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            console.log("Payload: ", payload);
+            return { ...payload, token }; // Incluir el token en el objeto payload
         } catch {
             return null;
         }

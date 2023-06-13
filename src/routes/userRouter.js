@@ -1,4 +1,5 @@
 "use strict";
+
 const { Router } = require("express");
 const { json } = require("express");
 
@@ -11,6 +12,7 @@ const handleAsyncError = require("../services/handleAsyncError.js");
 const validateBody = require("../middlewares/validateBody.js");
 const registerPayload = require("../validators/registerPayload.js");
 const router = Router();
+
 
 router.get("/news", (req, res) => {
     console.log("Hola");
@@ -31,12 +33,8 @@ router.post("/users/register", json(), async (req, res) => {
 // });
 
 router.post("/users/login", json(), async (req, res) => {
-    try {
-        const token = await loginUser(req.body);
-        sendResponse(res, { token });
-    } catch (error) {
-        sendError(res, error);
-    }
+    const token = await loginUser(req.body);
+    sendResponse(res, { token });
 });
 
 router.get("/users/:id", authGuard, (req, res) => {
@@ -53,5 +51,6 @@ router.patch("/users/:id", authGuard, json(), (req, res) => {
     // Modificar datos del usuario (solo para el propio usuario, o para el admin)
     res.json(req.body);
 });
+
 
 module.exports = router;

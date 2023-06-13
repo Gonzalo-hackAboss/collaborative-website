@@ -1,8 +1,7 @@
-
 "use strict";
 
-
 const mysql2 = require("mysql2/promise");
+
 
 //Singleton
 let pool = null;
@@ -26,9 +25,10 @@ function getConnection() {
     return pool;
 }
 
-
-
 module.exports = {
     createPool,
     getConnection,
 };
+
+
+

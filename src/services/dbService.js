@@ -2,10 +2,11 @@
 
 const { getConnection } = require("../database/mysqlConnection.js");
 
+
 const db = getConnection();
 
-module.exports = {
 
+module.exports = {
     async saveUser(user) {
         const statement = `
         INSERT INTO Users(id, nameMember, email, password, birthday, acceptedTOS, validated)
@@ -21,10 +22,9 @@ module.exports = {
             user.validated,
         ]);
     },
-
-
     // El array se puede sustituir como Object.values(user) como estaba antes, pero estoy haciendo pruebas.
 
+    // unsafe???
     async getUserByEmail(email) {
         const statement = `
         SELECT *
@@ -71,24 +71,12 @@ module.exports = {
     async getAllPosts() {
         const statement = `
         SELECT
-          p.id,
-          p.userId,
-          p.title,
-          p.description,
-          COALESCE(l.like_count, 0) AS likes,
-          COALESCE(c.comment_count, 0) AS comments
+          id,
+          idUser,
+          title,
+          description,
         FROM
-          posts p
-          LEFT JOIN (
-            SELECT postId, COUNT(*) AS like_count
-            FROM post_likes
-            GROUP BY postId
-          ) l ON p.id = l.postId
-          LEFT JOIN (
-            SELECT postId, COUNT(*) AS comment_count
-            FROM post_comments
-            GROUP BY postId
-          ) c ON p.id = c.postId
+          Posts
       `;
         const [rows] = await db.execute(statement);
         return rows;
@@ -96,10 +84,15 @@ module.exports = {
 
     async savePost(post) {
         const statement = `
-        INSERT INTO posts(id, userId, title, description)
+        INSERT INTO posts(id, idUser, title, description)
         VALUES(?, ?, ?, ?)
       `;
-        await db.execute(statement, Object.values(post));
+        await db.execute(statement, [
+            post.id,
+            post.idUser,
+            post.title,
+            post.description,
+        ]);
     },
 
     async updatePost(post) {

@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = (controllerFn) => {
     return async (req, res, next) => {
         try {
