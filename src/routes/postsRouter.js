@@ -22,30 +22,59 @@ const router = Router();
  */
 
 
- router.get("/posts", handleAsyncError(async (req, res) => {
-    const posts = await listPosts();
-    sendResponse(res, posts);
-}));
 
-router.get("/posts/search-post-categories", handleAsyncError(async (req, res) => {
-    const search = await searchByCategory();
-    sendResponse(res, search);
-}));
+router.get(
+    "/posts",
+    handleAsyncError(async (req, res) => {
+        const posts = await listPosts();
+        sendResponse(res, posts);
+    })
+);
 
-router.get("/posts/:id", handleAsyncError(async (req, res) => {
-    const post = await viewPostDetails(req.params.id);
-    sendResponse(res, post);
-}));
+router.get(
+    "/posts/search-post-categories",
+    handleAsyncError(async (req, res) => {
+        const search = await searchByCategory();
+        sendResponse(res, search);
+    })
+);
 
-router.post("/posts", authGuard, json(), handleAsyncError(async (req, res) => {
-    await createPost(req.currentUser.id, req.body);
-    sendResponse(res, undefined, 201);
-}));
+router.get(
+    "/posts/:id",
+    handleAsyncError(async (req, res) => {
+        const post = await viewPostDetail(req.params.id); // revisar
+        sendResponse(res, post);
+    })
+);
 
-router.post("/posts/:id/comments", authGuard, json(), handleAsyncError(async (req, res) => {
-    await addComment(req.params.id, req.currentUser.id, req.body);
-    sendResponse(res, undefined, 201);
-}));
+router.post(
+    "/posts",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        console.log("el usuario que llega al postRouter.js", req.currentUser);
+        console.log("el req.body: ", req.body);
+        if (!req.currentUser) {
+            throw new Error("INVALID_CREDENTIALS");
+        }
+
+        const token = req.currentUser.token; // Obtiene el token de la propiedad token del objeto currentUser
+
+        await createPost(req.body, token, res); // Pasa res como parámetro
+        sendResponse(res, undefined, 201);
+    })
+);
+
+router.post(
+    "/posts/:id/comments",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        await addComment(req.params.id, req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201);
+    })
+);
+
 /*
  **** VOTOS  ***
  */
@@ -57,10 +86,12 @@ router.post("/posts/:id/votes", async (req, res) => {
     const idUser = req.user.id; // ID del usuario autenticado
 });
 
+
 /*
  ****    POST    ****
  */
 router.get("/posts/:id", viewPostDetails);
+
 module.exports = router;
 
 /* Acceder al Buscador, revisar cómo implementarlo */
@@ -94,7 +125,17 @@ module.exports = router;
 //     handleAsyncError(async (req, res) => {
 //         //Agregar una nueva foto al post con id req.params.id
 //         await addPhoto(req.params.id, req.currentUser.id, req.files.photo);
-
 //         sendResponse(res);
+//     })
+// );
+
+// ANTIGUO ROUTER POST A LA RUTA /POST
+// router.post(
+//     "/posts",
+//     authGuard,
+//     json(),
+//     handleAsyncError(async (req, res) => {
+//         await createPost(req.currentUser.id, req.body);
+//         sendResponse(res, undefined, 201);
 //     })
 // );

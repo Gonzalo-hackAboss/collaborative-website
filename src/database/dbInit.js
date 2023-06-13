@@ -30,8 +30,8 @@ async function createDatabaseTables(pool) {
         id CHAR(36) PRIMARY KEY,
         nameMember VARCHAR(50) NOT NULL,
         email VARCHAR(50) NOT NULL UNIQUE,
-        password VARCHAR(50) NOT NULL,
-        birthday CHAR(8) NOT NULL,
+        password VARCHAR(100) NOT NULL,
+        birthday TIMESTAMP NOT NULL,
         acceptedTOS BOOL NOT NULL,
         validated BOOL NOT NULL DEFAULT false,
         biography CHAR(255),
@@ -82,8 +82,8 @@ async function createDatabaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Validation(
         id CHAR(36) PRIMARY KEY,
-        code CHAR(8) NOT NULL,
-        limitTime VARCHAR(36) NOT NULL,
+        code CHAR(6) NOT NULL,
+        limitTime VARCHAR(36),
         idUser CHAR(36) NOT NULL,
         FOREIGN KEY (idUser) REFERENCES Users (id) ON DELETE CASCADE
     );`);
@@ -111,11 +111,6 @@ async function createDatabaseTables(pool) {
         FOREIGN KEY (idUser) REFERENCES Users (id),
         FOREIGN KEY (idPost) REFERENCES Posts (id)
     );`);
-
-	   
 }
 
-
 initDB();
-
-

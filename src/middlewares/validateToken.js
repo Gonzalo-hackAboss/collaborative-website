@@ -1,31 +1,27 @@
-const jwt = require("jsonwebtoken");
-const cryptoService = require("../services/cryptoServices.js");
-const sendError = require("../utils/sendError.js");
+const parseJWT = require("../services/cryptoServices.js").parseJWT; // Asegúrate de importar la función parseJWT correctamente
+/**
+ * Validador de TOKENS
+ * Revisa el campo de Authorization que hay en el Header de la petición
+ * Si existe, validamos el token con la función de parseJWT
+ * Sino, declaramos que el user no tiene acceso.
+ */
 
-
-    // Exportar esto:
-    function validateToken(token, secretKey) {
-        try {
-            const decoded = jwt.verify(token, secretKey);
-            return decoded;
-        } catch (error) {
-            return null;
+module.exports = (req, res, next) => {
+    const token = req.headers.authorization;
+    console.log(
+        "recibiendo el TOKEN en validateToken.js",
+        req.headers.authorization
+    );
+    if (token) {
+        const user = parseJWT(token);
+        console.log("user: ", user);
+        if (user) {
+            req.currentUser = user;
+        } else {
+            req.currentUser = null;
         }
-    };
-
-    module.exports = validateToken;
-
-// Llevar este código donde se tenga que ejecutar.
-
-/*
-// pasado a loginUser
-const token = "..."; // El token que deseas validar
-const secretKey = "..."; // Llamar al .env con la CLAVE SECRETA del token
-
-const decodedToken = validateToken(token, secretKey);
-
-if ((decodedToken = null)) {
-    // El token no es válido
-    sendError();
-}
-*/
+    } else {
+        req.currentUser = null;
+    }
+    next();
+};
