@@ -13,12 +13,15 @@ const authGuard = require("../middlewares/authGuard.js");
 const sendResponse = require("../utils/sendResponse.js");
 const listPosts = require("../controllers/post/listPosts.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
+const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 
 const router = Router();
 
 /*
  ****    POSTS   ****
  */
+
+
 
 router.get(
     "/posts",
@@ -71,6 +74,7 @@ router.post(
         sendResponse(res, undefined, 201);
     })
 );
+
 /*
  **** VOTOS  ***
  */
@@ -81,6 +85,12 @@ router.post("/posts/:id/votes", async (req, res) => {
     const { userVote } = req.body; // Valor del voto (true o false)
     const idUser = req.user.id; // ID del usuario autenticado
 });
+
+
+/*
+ ****    POST    ****
+ */
+router.get("/posts/:id", viewPostDetails);
 
 module.exports = router;
 
