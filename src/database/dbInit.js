@@ -1,7 +1,9 @@
+'use strict'
+
 require("dotenv").config();
 const cryptoService = require("../services/cryptoServices.js");
 const { createPool } = require("./mysqlConnection.js");
-// const { faker } = require("@faker-js/faker");
+
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 

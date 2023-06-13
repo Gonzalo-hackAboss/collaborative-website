@@ -4,7 +4,6 @@ const handleAsyncError = require("../../services/handleAsyncError");
 const sendResponse = require("../../utils/sendResponse");
 
 
-
 module.exports = {
     viewPostDetails: handleAsyncError(async (req, res) => {
       const { id } = req.params;

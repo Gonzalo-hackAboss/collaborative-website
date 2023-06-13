@@ -2,7 +2,9 @@
 
 const { getConnection } = require("../database/mysqlConnection.js");
 
+
 const db = getConnection();
+
 
 module.exports = {
     async saveUser(user) {

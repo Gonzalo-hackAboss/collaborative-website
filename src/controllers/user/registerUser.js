@@ -1,6 +1,4 @@
 "use strict";
-
-
 const timeService = require("../../services/timeService.js");
 const errorService = require("../../services/errorService.js");
 const {
@@ -17,6 +15,7 @@ const {
     setSenderCredentials,
     sendValidationEmail,
 } = require("../../services/emailService.js");
+
 
 module.exports = async (userData) => {
     if (!userData.acceptedTOS) {
@@ -64,45 +63,5 @@ module.exports = async (userData) => {
     return {
         success: true,
         message: "User registered",
-
     };
-  }
-
-  // Se hashea la contraseña
-  const hashedPassword = await hashPassword(userData.password);
-
-  // Se genera el código de validación
-  const randomCode = generateRandomValidationCode();
-
-  // Se genera un nuevo id de usuario
-  const newUserId = generateUUID();
-
-  // Se guarda el usuario en la base de datos
-  const user = {
-    ...userData,
-    password: hashedPassword,
-    id: newUserId,
-    emailValidated: false,
-  };
-  await saveUser(user);
-
-  // Establecer las credenciales del remitente
-  setSenderCredentials(user.email, user.password);
-
-  // Se guarda el código de validación
-  const expiraTimestamp = timeService.getTimestampMinutesFromNow(6);
-  const validationCode = {
-    id: generateUUID(),
-    userId: user.id,
-    code: randomCode,
-    expiraTimestamp,
-  };
-  await saveValidationCode(validationCode);
-
-  // Se envía el correo de validación
-  await sendValidationEmail();
-
-  return {
-    success: true,
-  };
 };

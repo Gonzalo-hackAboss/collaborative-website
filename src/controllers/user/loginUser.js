@@ -12,6 +12,7 @@ const {
     notAuthenticated,
 } = require("../../services/errorService.js");
 
+
 async function loginUser(data) {
     const pool = getConnection();
 
@@ -60,4 +61,6 @@ async function loginUser(data) {
     };
 }
 
+
 module.exports = loginUser;
+
