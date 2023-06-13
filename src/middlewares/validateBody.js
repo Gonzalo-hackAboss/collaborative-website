@@ -2,6 +2,7 @@
 
 const sendError = require("../utils/sendError");
 
+
 module.exports = (schema) => {
     return (req, res, next) => {
         const result = schema.validate(req.body);

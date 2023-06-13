@@ -1,4 +1,6 @@
-"use strict";
+"use strict"
+
+
 module.exports = {
     /**
      * Devuelve un timestamp X cantidad de minutos en el futuro

@@ -1,6 +1,8 @@
 "use strict";
+
 const registerUser = require("./registerUser.js");
 const dbService = require("../../services/dbService.js");
+
 
 (async () => {
     const result = await registerUser({

@@ -1,3 +1,5 @@
+'use strict'
+
 const validateToken = require("../../middlewares/validateToken.js");
 const { generateUUID, parseJWT } = require("../../services/cryptoServices.js");
 const { savePost } = require("../../services/dbService.js");

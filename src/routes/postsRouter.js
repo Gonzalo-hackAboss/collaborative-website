@@ -1,4 +1,7 @@
+'use strict'
+
 const { Router, json } = require("express");
+'use strict'
 
 const addComment = require("../controllers/post/addComment.js");
 const addPhoto = require("../controllers/post/addPhoto.js");
@@ -15,13 +18,16 @@ const listPosts = require("../controllers/post/listPosts.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
 const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 
+
+
+
 const router = Router();
+
+
 
 /*
  ****    POSTS   ****
  */
-
-
 
 router.get(
     "/posts",
@@ -75,6 +81,8 @@ router.post(
     })
 );
 
+router.get("/posts/:id", viewPostDetails);
+
 /*
  **** VOTOS  ***
  */
@@ -86,11 +94,6 @@ router.post("/posts/:id/votes", async (req, res) => {
     const idUser = req.user.id; // ID del usuario autenticado
 });
 
-
-/*
- ****    POST    ****
- */
-router.get("/posts/:id", viewPostDetails);
 
 module.exports = router;
 

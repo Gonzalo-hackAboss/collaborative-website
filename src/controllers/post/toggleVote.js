@@ -1,9 +1,8 @@
 "use strict";
-// Traer getConnection dela base de datos
-// PROBAR CUANDO TENGAMOS LA BBDD CON DATOS
-
+// Traer getConnection dela base de datos// PROBAR CUANDO TENGAMOS LA BBDD CON DATOS
 const errorService = require("../../services/errorService");
 const getConnection = require("../../database/mysqlConnection");
+
 
 function toggleVote(idUser, idPost, userVote) {
     // Consulta a la base de datos para obtener el voto existente
