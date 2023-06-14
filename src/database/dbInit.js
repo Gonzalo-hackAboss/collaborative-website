@@ -8,10 +8,10 @@ const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
 const initDB = async () => {
     const pool = createPool();
-    console.log("3");
+    
     //BORRO LA BASE DE DATOS SI EXISTE
     await pool.query(`DROP DATABASE IF EXISTS ${DATABASE_NAME}`);
-    console.log("4");
+    
     //CREO LA BASE DE DATOS
     await pool.query(`CREATE DATABASE ${DATABASE_NAME}`);
     await pool.query(`USE ${DATABASE_NAME}`);
@@ -22,7 +22,7 @@ const initDB = async () => {
     // await insertAdminUsers(pool);
 
     // await generateFakeData(pool);
-    console.log("5");
+    
     await pool.end();
 };
 

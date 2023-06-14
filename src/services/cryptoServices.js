@@ -4,43 +4,40 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
 module.exports = {
-    /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
+    // Generar un hash para una contraseña dada
     async hashPassword(plainPassword) {
         return await bcrypt.hash(plainPassword, 10);
     },
 
+    // Validar una contraseña en texto plano con un hash dado
     async validatePassword(plainPassword, hash) {
-        console.log("validando....");
-        console.log(plainPassword);
-        console.log(hash);
         return await bcrypt.compare(plainPassword, hash);
     },
 
-    /*Generar código aleatorio para validar los emails, un código de 6 dígitos.*/
+    // Generar un código de validación aleatorio de 6 dígitos
     generaterandomvalidationcode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         return code;
     },
 
-    /*Generar un identificador único*/
+    // Generar un UUID (identificador único universal) utilizando el módulo crypto
     generateUUID() {
         return crypto.randomUUID();
     },
 
+    // Generar un JSON Web Token (JWT) con el payload proporcionado
     generateJWT(payload) {
         return jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "10d",
         });
     },
 
+    // Analizar un JSON Web Token (JWT) y devolver su contenido (payload)
     parseJWT(token) {
-        console.log("token en el PARSE crypto: ", token);
         try {
             const payload = jwt.verify(token, process.env.JWT_SECRET);
-            console.log("Payload: ", payload);
-            return { ...payload, token }; // Incluir el token en el objeto payload
+            return { ...payload, token }; // Devolver el payload y el token en un objeto
         } catch {
             return null;
         }

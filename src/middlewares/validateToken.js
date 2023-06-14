@@ -12,13 +12,10 @@ const parseJWT = require("../services/cryptoServices.js").parseJWT;
  */
 module.exports = (req, res, next) => {
     const token = req.headers.authorization;
-    console.log(
-        "recibiendo el TOKEN en validateToken.js",
-        req.headers.authorization
-    );
+    
     if (token) {
         const user = parseJWT(token);
-        console.log("user: ", user);
+        
         if (user) {
             req.currentUser = user;
         } else {

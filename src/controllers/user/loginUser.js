@@ -18,7 +18,7 @@ async function loginUser(data) {
 
     // Verificar si se proporcionaron el email y la contraseña
     if (!data.email || !data.password) {
-        console.log("email o password mal (primera validacion)");
+    
         throw invalidCredentials();
     }
 
@@ -28,7 +28,7 @@ async function loginUser(data) {
         [data.email]
     );
 
-    console.log("row", rows);
+    
     // Verificar si no se encontró ningún usuario con el email proporcionado
     if (rows.length === 0) {
         throw invalidCredentials();
