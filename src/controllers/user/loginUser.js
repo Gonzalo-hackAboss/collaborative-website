@@ -24,7 +24,7 @@ async function loginUser(data) {
 
     // Consultar la base de datos para obtener el ID y el rol del usuario por su email
     const [rows] = await pool.query(
-        "SELECT id, role FROM Users WHERE email = ?",
+        "SELECT * FROM Users WHERE email = ?",
         [data.email]
     );
 

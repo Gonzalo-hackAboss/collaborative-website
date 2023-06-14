@@ -9,7 +9,7 @@ module.exports = async (postId, userId, postPayload) => {
     const oldPost = await getPostById(postId);
 
     // Verificar si el usuario actual es el propietario del post
-    if (oldPost.userId !== userId) {
+    if (oldPost.idUser !== userId) {
         // Si el usuario no está autorizado, enviar un error personalizado utilizando el servicio de errores
         return errorService.unauthorizedUser();
     }

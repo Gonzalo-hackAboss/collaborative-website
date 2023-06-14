@@ -7,6 +7,8 @@ const morgan = require("morgan");
 
 const appRouter = require("./src/routes/appRouter.js");
 const sendError = require("./src/utils/sendError.js");
+const validateToken = require("./src/middlewares/validateToken.js");
+
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +17,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(fileUpload());
 app.use(morgan("dev"));
+app.use(validateToken);
 app.use(appRouter);
 
 // Middleware para manejar errores
