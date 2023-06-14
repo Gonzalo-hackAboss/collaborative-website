@@ -45,7 +45,7 @@ module.exports = async (userData) => {
         validated: false,
         role: "Usuario",
     };
-    c
+    
     await saveUser(user);
 
     // Se guarda el código de validación
