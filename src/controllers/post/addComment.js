@@ -1,21 +1,12 @@
 "use strict";
 
 const { generateUUID } = require("../../services/cryptoServices");
-const {
-    checkUserPermission,
-    saveComment,
-} = require("../../services/dbService.js");
+const { saveComment } = require("../../services/dbService.js");
 const errorService = require("../../services/errorService.js");
 
-module.exports = async (postId, currentUserId, commentPayload) => {
-    const hasPermission = await checkUserPermission(postId, currentUserId);
-    if (!hasPermission) {
-        /*throw new Error(
-            "User doesn't have permission to add comments to this post"
-        );*/
-        errorService.unauthorizedUser();
-    }
 
+// Función para agregar un comentario a una publicación
+module.exports = async (postId, currentUserId, commentPayload) => {
     const newComment = {
         postId,
         userId: currentUserId,

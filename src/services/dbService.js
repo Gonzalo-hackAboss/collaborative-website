@@ -245,14 +245,5 @@ module.exports = {
         return rows;
     },
 
-    async checkUserPermission(postId, userId) {
-        const statement = `
-        SELECT *
-        FROM posts
-        WHERE id = ? AND userId = ?
-      `;
-        const [rows] = await db.execute(statement, [postId, userId]);
-
-        return rows.length > 0;
-    },
+    
 };
