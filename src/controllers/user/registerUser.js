@@ -45,7 +45,7 @@ module.exports = async (userData) => {
         validated: false,
         role: "Usuario",
     };
-    console.log(user);
+    c
     await saveUser(user);
 
     // Se guarda el código de validación
@@ -57,7 +57,7 @@ module.exports = async (userData) => {
         expiraTimestamp,
     };
     await saveValidationCode(validationCode);
-    console.log("email: ", user.email);
+    
     await sendValidationEmail(user.email, user.nameMember, validationCode.code);
 
     return {
