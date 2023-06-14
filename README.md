@@ -61,7 +61,7 @@ Los usuarios anónimos tienen las siguientes funcionalidades:
 
 ### - Características de los usuarios registrados:
 
-Los usuarios registrados tienen todas las funcionalidades de los usuarios anónimos, además de las siguientes:
+Los usuarios registrados tienen acceso a todas las funcionalidades de los usuarios anónimos y además a las siguientes:
 
 . Publicar una nueva noticia, incluyendo título, foto (opcional), entradilla, texto de la noticia y tema.
 
@@ -142,13 +142,14 @@ La API de nuestra web de noticias colaborativas está construida utilizando las 
 -   Base de datos: Utilizamos como base de datos relacional MySQL para almacenar la información de los usuarios, noticias y temas.
 
 -   Pruebas con Insomnia: Hemos realizado pruebas manuales y exploratorias, en lugar de escribir pruebas automatizadas. Así hemos podido probar la API de forma interactiva, enviando solicitudes HTTP y verificando manualmente las respuestas.
-    .
-
-## Detalles de nuestro código
 
 Listado de archivos:
 
+**app.js**:
+
 ### Controllers:
+
+#### Post
 
 **addComment.js**: Controlador que maneja la lógica para agregar comentarios a los posts.
 
@@ -156,7 +157,7 @@ Listado de archivos:
 
 **createPost.js**: Controlador esencial para crear nuevos posts.
 
-### Services:
+#### Services:
 
 **cryptoServices.js**: Servicio para operaciones de cifrado.
 
@@ -165,9 +166,17 @@ Listado de archivos:
 **emailService.js**: Servicio para enviar correos electrónicos.
 
 ------------- Sigo detallando?
-.
+**fileService.js**:
+**handleAsyncError.js**:
+**timeService.js**:
 
--   Plataforma de alojamiento Netlify: **https://c011a80rati83-w38sit3.netlify.app/**
+#### Utils:
+
+#### Validators:
+
+## Plataforma de alojamiento, Netlify:
+
+**https://c011a80rati83-w38sit3.netlify.app/**
 
 ------------- LO DEJO O LO QUITO:
 
