@@ -2,9 +2,7 @@
 
 const { getConnection } = require("../database/mysqlConnection.js");
 
-
 const db = getConnection();
-
 
 module.exports = {
     async saveUser(user) {
@@ -70,27 +68,50 @@ module.exports = {
 
     async getAllPosts() {
         const statement = `
-        SELECT
-          id,
-          idUser,
-          title,
-          description,
-        FROM
-          Posts
+        SELECT id, title, entradilla, idUser, createdAt
+        FROM Posts
+        WHERE id <> (
+          SELECT id
+          FROM Posts
+          ORDER BY createdAt DESC
+          LIMIT 1
+        )
+        ORDER BY createdAt DESC;
       `;
         const [rows] = await db.execute(statement);
         return rows;
     },
 
+    async getLastPost() {
+        const statement = `
+      SELECT * FROM Posts
+      ORDER BY createdAt DESC
+      LIMIT 1
+    `;
+        const [rows] = await db.execute(statement);
+        return rows;
+    },
+
+    async getPostById(postId) {
+        const statement = `
+      SELECT *
+      FROM Posts
+      WHERE id = ?
+    `;
+        const [rows] = await db.execute(statement, [postId]);
+        return rows[0];
+    },
+
     async savePost(post) {
         const statement = `
-        INSERT INTO posts(id, idUser, title, description)
-        VALUES(?, ?, ?, ?)
+        INSERT INTO posts(id, idUser, title, entradilla, description)
+        VALUES(?, ?, ?, ?, ?)
       `;
         await db.execute(statement, [
             post.id,
             post.idUser,
             post.title,
+            post.entradilla,
             post.description,
         ]);
     },
@@ -102,17 +123,6 @@ module.exports = {
         WHERE id = ?
       `;
         await db.execute(statement, [post.title, post.description, post.id]);
-    },
-
-    async getPostById(postId) {
-        const statement = `
-        SELECT *
-        FROM posts as p
-        WHERE p.id = ?
-      `;
-        const [rows] = await db.execute(statement, [postId]);
-
-        return rows[0];
     },
 
     async getCommentsByPostId(postId) {
@@ -245,5 +255,14 @@ module.exports = {
         return rows;
     },
 
-    
+    async checkUserPermission(postId, userId) {
+        const statement = `
+        SELECT *
+        FROM posts
+        WHERE id = ? AND userId = ?
+      `;
+        const [rows] = await db.execute(statement, [postId, userId]);
+
+        return rows.length > 0;
+    },
 };

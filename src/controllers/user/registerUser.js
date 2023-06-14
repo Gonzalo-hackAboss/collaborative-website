@@ -16,7 +16,6 @@ const {
     sendValidationEmail,
 } = require("../../services/emailService.js");
 
-
 module.exports = async (userData) => {
     if (!userData.acceptedTOS) {
         return {
@@ -44,6 +43,7 @@ module.exports = async (userData) => {
         password: hashedPassword,
         id: newUserId,
         validated: false,
+        role: "Usuario",
     };
     console.log(user);
     await saveUser(user);

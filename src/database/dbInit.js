@@ -1,9 +1,8 @@
-'use strict'
+"use strict";
 
 require("dotenv").config();
 const cryptoService = require("../services/cryptoServices.js");
 const { createPool } = require("./mysqlConnection.js");
-
 
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
@@ -48,6 +47,7 @@ async function createDatabaseTables(pool) {
     CREATE TABLE IF NOT EXISTS Posts(
         id CHAR(36) PRIMARY KEY,
         title VARCHAR(50) NOT NULL,
+        entradilla VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         idUser CHAR(36),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,7 @@ async function createDatabaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Categories(
         id CHAR(36) PRIMARY KEY,
-        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional', 'Nacional', 'Música'),
+        category ENUM('RPG', 'PS5', 'PS4', 'PS3', 'Retro', 'E3', 'Switch', 'DS', 'Xbox Series', 'Xbox One', 'Xbox 360'),
         description VARCHAR(50) NOT NULL
     );`);
 
