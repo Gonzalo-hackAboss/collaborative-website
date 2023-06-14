@@ -36,7 +36,7 @@ router.get(
 router.get(
     "/posts/:id",
     handleAsyncError(async (req, res) => {
-        const post = await viewPostDetails(); // revisar
+        const post = await viewPostDetails(req); // revisar
         sendResponse(res, post);
     })
 );
@@ -129,16 +129,6 @@ module.exports = router;
 //         sendResponse(res, posts);
 //     })
 // );
-
-//router.post(
-//   "/posts/:id/like",
-//   authGuard,
-//  handleAsyncError(async (req, res) => {
-//       //Hacer toggle del like en el post con id req.params.id
-//       await toggleLike(req.params.id, req.currentUser.id);
-//      sendResponse(res);
-//   })
-//);
 
 /*
  *** ESPERANDO A IMPLEMENTAR LAS FOTOS PARA PROBARLO
