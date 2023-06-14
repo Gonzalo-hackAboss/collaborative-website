@@ -3,7 +3,6 @@
 const { Router } = require("express");
 const { json } = require("express");
 
-
 const registerUser = require("../controllers/user/registerUser.js");
 const loginUser = require("../controllers/user/loginUser.js");
 const sendResponse = require("../utils/sendResponse.js");
@@ -21,16 +20,24 @@ router.get("/news", (req, res) => {
 });
 
 // Registrar un nuevo usuario
-router.post("/users/register", json(), async (req, res) => {
-    const result = await registerUser(req.body);
-    res.json(result);
-});
+router.post(
+    "/users/register",
+    json(),
+    handleAsyncError(async (req, res) => {
+        await registerUser(req.body);
+        sendResponse(res);
+    })
+);
 
 // Iniciar sesión de usuario
-router.post("/users/login", json(), async (req, res) => {
-    const token = await loginUser(req.body);
-    sendResponse(res, { token });
-});
+router.post(
+    "/users/login",
+    json(),
+    handleAsyncError(async (req, res) => {
+        const token = await loginUser(req.body);
+        sendResponse(res, { token });
+    })
+);
 
 // Obtener detalles de un usuario específico
 router.get("/users/:id", authGuard, (req, res) => {
