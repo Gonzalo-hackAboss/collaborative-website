@@ -7,6 +7,7 @@ const morgan = require("morgan");
 
 const appRouter = require("./src/routes/appRouter.js");
 const sendError = require("./src/utils/sendError.js");
+const validateToken = require("./src/middlewares/validateToken.js");
 
 
 const app = express();
@@ -16,9 +17,10 @@ const PORT = 3000;
 app.use(express.json());
 app.use(fileUpload());
 app.use(morgan("dev"));
+app.use(validateToken);
 app.use(appRouter);
 
-//middleware de error
+// Middleware para manejar errores
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({
         success: false,
@@ -29,8 +31,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-//middleware de ruta no encontrada
-
+// Middleware para manejar las solicitudes a endpoints desconocidos
 app.use((req, res) => {
     sendError(res, {
         status: 404,
@@ -38,7 +39,6 @@ app.use((req, res) => {
         message: `Endpoint desconocido: ${req.method} ${req.path}`,
     });
 });
-
 
 
 app.listen(PORT, () => {

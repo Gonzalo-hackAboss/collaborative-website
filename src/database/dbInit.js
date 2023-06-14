@@ -1,18 +1,17 @@
-'use strict'
+"use strict";
 
 require("dotenv").config();
 const cryptoService = require("../services/cryptoServices.js");
 const { createPool } = require("./mysqlConnection.js");
 
-
 const DATABASE_NAME = process.env.MYSQL_DATABASE;
 
 const initDB = async () => {
     const pool = createPool();
-    console.log("3");
+    
     //BORRO LA BASE DE DATOS SI EXISTE
     await pool.query(`DROP DATABASE IF EXISTS ${DATABASE_NAME}`);
-    console.log("4");
+    
     //CREO LA BASE DE DATOS
     await pool.query(`CREATE DATABASE ${DATABASE_NAME}`);
     await pool.query(`USE ${DATABASE_NAME}`);
@@ -23,7 +22,7 @@ const initDB = async () => {
     // await insertAdminUsers(pool);
 
     // await generateFakeData(pool);
-    console.log("5");
+    
     await pool.end();
 };
 
@@ -48,6 +47,7 @@ async function createDatabaseTables(pool) {
     CREATE TABLE IF NOT EXISTS Posts(
         id CHAR(36) PRIMARY KEY,
         title VARCHAR(50) NOT NULL,
+        entradilla VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         idUser CHAR(36),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,7 @@ async function createDatabaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Categories(
         id CHAR(36) PRIMARY KEY,
-        category ENUM('Salud', 'Politica', 'Deportes', 'Viajes', 'Cocina', 'Internacional', 'Nacional', 'Música'),
+        category ENUM('RPG', 'PS5', 'PS4', 'PS3', 'Retro', 'E3', 'Switch', 'DS', 'Xbox Series', 'Xbox One', 'Xbox 360'),
         description VARCHAR(50) NOT NULL
     );`);
 

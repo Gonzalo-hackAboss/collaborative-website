@@ -28,7 +28,7 @@ function toggleVote(idUser, idPost, userVote) {
                             requestFailed();
                             return;
                         }
-                        console.log("Voto creado exitosamente.");
+                        
                     }
                 );
             } else {
@@ -48,7 +48,7 @@ function toggleVote(idUser, idPost, userVote) {
                                 requestFailed();
                                 return;
                             }
-                            console.log("Voto actualizado exitosamente.");
+                            
                         }
                     );
                 } else {
@@ -65,7 +65,7 @@ function toggleVote(idUser, idPost, userVote) {
                                 requestFailed();
                                 return;
                             }
-                            console.log("Voto eliminado exitosamente.");
+                            
                         }
                     );
                 }
