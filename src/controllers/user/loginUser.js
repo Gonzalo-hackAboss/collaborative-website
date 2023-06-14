@@ -15,20 +15,17 @@ const {
 // Función para autenticar un usuario
 async function loginUser(data) {
     const pool = getConnection();
+    console.log("Hola");
 
     // Verificar si se proporcionaron el email y la contraseña
     if (!data.email || !data.password) {
-    
         throw invalidCredentials();
     }
 
     // Consultar la base de datos para obtener el ID y el rol del usuario por su email
-    const [rows] = await pool.query(
-        "SELECT * FROM Users WHERE email = ?",
-        [data.email]
-    );
-
-    
+    const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
+        data.email,
+    ]);
     // Verificar si no se encontró ningún usuario con el email proporcionado
     if (rows.length === 0) {
         throw invalidCredentials();

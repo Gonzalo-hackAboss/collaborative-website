@@ -24,8 +24,10 @@ module.exports = async (userData) => {
         };
     }
 
-    if (await getUserByEmail(userData.email)) {
-        return errorService.emailAlreadyRegistered;
+    const repeatedEmail = await getUserByEmail(userData.email);
+
+    if (repeatedEmail) {
+        errorService.emailAlreadyRegistered();
     }
 
     // Se hashea la contraseña
@@ -45,7 +47,7 @@ module.exports = async (userData) => {
         validated: false,
         role: "Usuario",
     };
-    
+
     await saveUser(user);
 
     // Se guarda el código de validación
@@ -57,7 +59,7 @@ module.exports = async (userData) => {
         expiraTimestamp,
     };
     await saveValidationCode(validationCode);
-    
+
     await sendValidationEmail(user.email, user.nameMember, validationCode.code);
 
     return {

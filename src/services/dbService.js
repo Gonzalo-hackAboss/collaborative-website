@@ -1,6 +1,7 @@
 "use strict";
 
 const { getConnection } = require("../database/mysqlConnection.js");
+const { emailAlreadyRegistered } = require("./errorService.js");
 
 const db = getConnection();
 
@@ -30,6 +31,10 @@ module.exports = {
         WHERE users.email = ?
       `;
         const [rows] = await db.execute(statement, [email]);
+
+        // if (rows.length > 0) {
+        //     throw emailAlreadyRegistered();
+        // }
 
         return rows[0];
     },
