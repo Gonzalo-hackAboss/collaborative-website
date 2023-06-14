@@ -14,7 +14,7 @@ module.exports = {
                 {
                     From: {
                         Email: process.env.MAIL_SENDER_FROM, 
-                        Name: process.env.MAIL_SENDER_NAME, o
+                        Name: process.env.MAIL_SENDER_NAME, 
                     },
                     To: [
                         {
