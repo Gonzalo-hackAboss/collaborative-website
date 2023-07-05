@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /**
  * Envío de respuesta de status OK.

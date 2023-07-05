@@ -4,9 +4,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
 module.exports = {
-    /*Hashea la contraseña, devuelve la contraseña hasheada y valida la contraseña con respecto al hash.*/
     async hashPassword(plainPassword) {
         return await bcrypt.hash(plainPassword, 10);
     },
@@ -18,13 +16,11 @@ module.exports = {
         return await bcrypt.compare(plainPassword, hash);
     },
 
-    /*Generar código aleatorio para validar los emails, un código de 6 dígitos.*/
     generaterandomvalidationcode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         return code;
     },
 
-    /*Generar un identificador único*/
     generateUUID() {
         return crypto.randomUUID();
     },
@@ -36,11 +32,9 @@ module.exports = {
     },
 
     parseJWT(token) {
-        console.log("token en el PARSE crypto: ", token);
         try {
             const payload = jwt.verify(token, process.env.JWT_SECRET);
-            console.log("Payload: ", payload);
-            return { ...payload, token }; // Incluir el token en el objeto payload
+            return { ...payload, token };
         } catch {
             return null;
         }

@@ -16,7 +16,6 @@ const {
     sendValidationEmail,
 } = require("../../services/emailService.js");
 
-
 module.exports = async (userData) => {
     if (!userData.acceptedTOS) {
         return {
@@ -29,26 +28,22 @@ module.exports = async (userData) => {
         return errorService.emailAlreadyRegistered;
     }
 
-    // Se hashea la contraseña
     const hashedPassword = await hashPassword(userData.password);
 
-    // Se genera el código de validación
     const randomCode = generaterandomvalidationcode();
 
-    // Se genera nuevo id de usuario
     const newUserId = generateUUID();
 
-    // Se guarda usuario en la db
     const user = {
         ...userData,
         password: hashedPassword,
         id: newUserId,
         validated: false,
+        role: "Usuario",
     };
     console.log(user);
     await saveUser(user);
 
-    // Se guarda el código de validación
     const expiraTimestamp = timeService.getTimestampMinutesFromNow(6);
     const validationCode = {
         id: generateUUID(),

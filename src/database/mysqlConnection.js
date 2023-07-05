@@ -2,7 +2,6 @@
 
 const mysql2 = require("mysql2/promise");
 
-
 //Singleton
 let pool = null;
 function createPool(database) {
@@ -10,7 +9,7 @@ function createPool(database) {
     const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD } = process.env;
     console.log("2");
     return mysql2.createPool({
-        // connectionLimit: 15,
+        connectionLimit: 15,
         host: MYSQL_HOST,
         user: MYSQL_USER,
         database: database,
@@ -29,6 +28,3 @@ module.exports = {
     createPool,
     getConnection,
 };
-
-
-

@@ -1,15 +1,19 @@
 "use strict";
 
-const dbService = require("../../services/dbService.js");
+const {
+    getCommentByCommentId,
+    updateComment,
+} = require("../../services/dbService.js");
 const errorService = require("../../services/errorService.js");
 
-
 module.exports = async (commentId, userId, commentPayload) => {
-    const comment = await dbService.getCommentById(commentId);
-    const isUserAuthorized = comment.userId === userId;
-    if (!isUserAuthorized) {
+    const oldComment = await getCommentByCommentId(commentId);
+
+    if (oldComment[0].iDUser !== userId) {
         return errorService.unauthorizedUser();
     }
 
-    await dbService.updateComment(commentId, commentPayload);
+    const newPost = Object.assign({}, oldComment, commentPayload);
+
+    await updateComment(newPost);
 };

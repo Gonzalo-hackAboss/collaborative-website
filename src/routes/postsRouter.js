@@ -4,6 +4,7 @@ const { Router, json } = require("express");
 ("use strict");
 
 const addComment = require("../controllers/post/addComment.js");
+const viewComments = require("../controllers/post/viewComments.js");
 const addPhoto = require("../controllers/post/addPhoto.js");
 const createPost = require("../controllers/post/createPost.js");
 const deleteComment = require("../controllers/post/deleteComment.js");
@@ -14,10 +15,12 @@ const handleAsyncError = require("../services/handleAsyncError.js");
 const authGuard = require("../middlewares/authGuard.js");
 const sendResponse = require("../utils/sendResponse.js");
 const listPosts = require("../controllers/post/listPosts.js");
+const lastPosts = require("../controllers/post/lastPost.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
 // const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 const viewPostDetails = require("../controllers/post/viewPostDetails.js");
 const { updatePost, deletePost } = require("../services/dbService.js");
+const viewUniqueComment = require("../controllers/post/viewUniqueComment.js");
 
 const router = Router();
 
@@ -28,8 +31,11 @@ const router = Router();
 router.get(
     "/posts",
     handleAsyncError(async (req, res) => {
+        const fullPost = await lastPosts();
+        // console.log("fullPost: ", fullPost);
         const posts = await listPosts();
-        sendResponse(res, posts);
+        const allPosts = [...fullPost, ...posts];
+        sendResponse(res, allPosts);
     })
 );
 
@@ -63,7 +69,7 @@ router.post(
         const token = req.currentUser.token; // Obtiene el token de la propiedad token del objeto currentUser
 
         await createPost(req.body, token, res); // Pasa res como parámetro
-        sendResponse(res, undefined, 201);
+        sendResponse(res, req.body, undefined, 201);
     })
 );
 
@@ -73,20 +79,25 @@ router.post(
     json(),
     handleAsyncError(async (req, res) => {
         await addComment(req.params.id, req.currentUser.id, req.body);
-        sendResponse(res, undefined, 201);
+        sendResponse(res, req.body, undefined, 201);
     })
 );
 
-/*
- **** VOTOS  ***
- */
+router.get(
+    "/posts/:id/comments",
+    handleAsyncError(async (req, res) => {
+        const post = await viewComments(req);
+        sendResponse(res, post);
+    })
+);
 
-router.post("/posts/:id/votes", async (req, res) => {
-    console.log("has votado - esto luego se elimina");
-    const { idPost } = req.params; // ID del post
-    const { userVote } = req.body; // Valor del voto (true o false)
-    const idUser = req.user.id; // ID del usuario autenticado
-});
+router.get(
+    "/posts/:id/comments/:id",
+    handleAsyncError(async (req, res) => {
+        const comment = await viewUniqueComment(req);
+        sendResponse(res, comment);
+    })
+);
 
 router.put(
     "/posts/:id",
@@ -103,55 +114,64 @@ router.put(
     })
 );
 
-router.delete(
-    "/posts/:id",
+router.put(
+    "/posts/:id/comments/:id",
     authGuard,
     json(),
     handleAsyncError(async (req, res) => {
         if (!req.currentUser) {
             throw new Error("INVALID_CREDENTIALS");
         }
+        const token = req.currentUser.token;
+        console.log("hola");
+        await editComment(req.params.id, req.currentUser.id, req.body);
+        sendResponse(res, undefined, 201);
+    })
+);
 
+router.delete(
+    "/posts/:id",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        console.log("req.params.id: ", req.params.id); // Esto es el postId
+        console.log("req.currentuser: ", req.currentUser);
+        console.log("req.body: ", req.body);
+        if (!req.currentUser) {
+            throw new Error("INVALID_CREDENTIALS");
+        }
         const token = req.currentUser.token; // Obtiene el token de la propiedad token del objeto currentUser
         await deletePost(req.params.id, req.currentUser.id, req.body);
         sendResponse(res, undefined, 200);
     })
 );
 
-module.exports = router;
-
-/* Acceder al Buscador, revisar cómo implementarlo */
-// router.get(
-//     "/posts/search",
-//     handleAsyncError(async (req, res) => {
-//         //Obtener todos los posts
-//         const posts = await searchPosts(req.query);
-//         sendResponse(res, posts);
-//     })
-// );
+router.delete(
+    "/posts/:id/comments/:commentId",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        console.log("req.params.commentId: ", req.params.commentId);
+        console.log("req.params.id: ", req.params.id); // Esto es el postId
+        console.log("req.currentuser: ", req.currentUser);
+        if (!req.currentUser) {
+            throw new Error("INVALID_CREDENTIALS");
+        }
+        const token = req.currentUser.token;
+        await deleteComment(req.params.commentId, req.currentUser.id);
+        sendResponse(res, undefined, 200);
+    })
+);
 
 /*
- *** ESPERANDO A IMPLEMENTAR LAS FOTOS PARA PROBARLO
+ **** VOTOS  ***
  */
 
-// router.post(
-//     "/posts/:id/photos",
-//     authGuard,
-//     // fileUpload(),
-//     handleAsyncError(async (req, res) => {
-//         //Agregar una nueva foto al post con id req.params.id
-//         await addPhoto(req.params.id, req.currentUser.id, req.files.photo);
-//         sendResponse(res);
-//     })
-// );
+router.post("/posts/:id/votes", async (req, res) => {
+    console.log("has votado - esto luego se elimina");
+    const { idPost } = req.params; // ID del post
+    const { userVote } = req.body; // Valor del voto (true o false)
+    const idUser = req.user.id; // ID del usuario autenticado
+});
 
-// ANTIGUO ROUTER POST A LA RUTA /POST
-// router.post(
-//     "/posts",
-//     authGuard,
-//     json(),
-//     handleAsyncError(async (req, res) => {
-//         await createPost(req.currentUser.id, req.body);
-//         sendResponse(res, undefined, 201);
-//     })
-// );
+module.exports = router;

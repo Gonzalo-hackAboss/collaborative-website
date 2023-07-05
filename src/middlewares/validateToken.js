@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
 
     if (token) {
         const user = parseJWT(token);
-        console.log("user Validado: ", user);
         if (user) {
             req.currentUser = user;
         } else {

@@ -6,7 +6,6 @@ const errorService = require("../../services/errorService.js");
 
 function confirm(condition, message) {
     if (!condition) {
-        // throw new Error(message);
         return errorService.unauthorizedUser();
     }
 }

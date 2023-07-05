@@ -1,13 +1,14 @@
 "use strict";
 
 const { getConnection } = require("../database/mysqlConnection.js");
+const sendResponse = require("../utils/sendResponse.js");
 
 const db = getConnection();
 
 module.exports = {
     async saveUser(user) {
         const statement = `
-        INSERT INTO Users(id, nameMember, email, password, birthday, acceptedTOS, validated)
+        INSERT INTO users(id, nameMember, email, password, birthday, acceptedTOS, validated)
         VALUES(?, ?, ?, ?, ?, ?, ?)
       `;
         await db.execute(statement, [
@@ -20,7 +21,6 @@ module.exports = {
             user.validated,
         ]);
     },
-    // El array se puede sustituir como Object.values(user) como estaba antes, pero estoy haciendo pruebas.
 
     // unsafe???
     async getUserByEmail(email) {
@@ -48,7 +48,7 @@ module.exports = {
     async saveValidationCode(code) {
         console.log(code);
         const statement = `
-        INSERT INTO Validation(id, idUser, code)
+        INSERT INTO validation(id, idUser, code)
         VALUES(?, ?, ?)
       `;
         await db.execute(statement, [code.id, code.idUser, code.code]);
@@ -68,10 +68,26 @@ module.exports = {
 
     async getAllPosts() {
         const statement = `
-        SELECT *
-        FROM
-          Posts
+        SELECT id, title, entradilla, idUser, createdAt
+        FROM posts
+        WHERE id <> (
+          SELECT id
+          FROM posts
+          ORDER BY createdAt DESC
+          LIMIT 1
+        )
+        ORDER BY createdAt DESC;
       `;
+        const [rows] = await db.execute(statement);
+        return rows;
+    },
+
+    async getLastPost() {
+        const statement = `
+      SELECT * FROM posts
+      ORDER BY createdAt DESC
+      LIMIT 1
+    `;
         const [rows] = await db.execute(statement);
         return rows;
     },
@@ -79,7 +95,7 @@ module.exports = {
     async getPostById(postId) {
         const statement = `
       SELECT *
-      FROM Posts
+      FROM posts
       WHERE id = ?
     `;
         const [rows] = await db.execute(statement, [postId]);
@@ -88,13 +104,14 @@ module.exports = {
 
     async savePost(post) {
         const statement = `
-        INSERT INTO posts(id, idUser, title, description)
-        VALUES(?, ?, ?, ?)
+        INSERT INTO posts(id, idUser, title, entradilla, description)
+        VALUES(?, ?, ?, ?, ?)
       `;
         await db.execute(statement, [
             post.id,
             post.idUser,
             post.title,
+            post.entradilla,
             post.description,
         ]);
     },
@@ -110,29 +127,45 @@ module.exports = {
 
     async getCommentsByPostId(postId) {
         const statement = `
-        SELECT *
-        FROM post_comments as cp
-        WHERE cp.postId = ?
-      `;
+          SELECT *
+          FROM postcomments
+          WHERE idPost = ?
+        `;
         const [rows] = await db.execute(statement, [postId]);
+        console.log("rows: ", rows);
 
         return rows;
     },
 
-    async saveComment(postComment) {
+    async getCommentByCommentId(commentId) {
         const statement = `
-        INSERT INTO post_comments(id, userId, postId, comment)
-        VALUES(?, ?, ?, ?)
+      SELECT * FROM postcomments
+      WHERE id = ?
       `;
-        await db.execute(statement, Object.values(postComment));
+
+        const [rows] = await db.execute(statement, [commentId]);
+        return rows;
     },
 
-    // TRAIGO AQUI EL CONTENIDO DE searchCategory.js y dejo en ese archivo solo el
+    async saveComment(newComment) {
+        const statement = `
+        INSERT INTO postcomments(id, iDUser, idPost, comments)
+        VALUES(?, ?, ?, ?)
+      `;
+        console.log(newComment);
+        await db.execute(statement, [
+            newComment.id,
+            newComment.userId,
+            newComment.postId,
+            newComment.comment,
+        ]);
+    },
+
     async searchByCategory(searchTerm, categoryNameArray) {
         try {
             const likeTerm = `%${searchTerm}%`;
             let statement = `
-          SELECT * FROM Tems
+          SELECT * FROM tems
           WHERE ?
           `;
             for (let i = 0; i < categoryNameArray.length; i++) {
@@ -152,7 +185,7 @@ module.exports = {
 
     async countVotes(postId) {
         const statement = `
-        SELECT COUNT(*) as votes FROM Votes
+        SELECT COUNT(*) as votes FROM votes
         WHERE postId = ?
       `;
         const [rows] = await db.execute(statement, [postId]);
@@ -161,7 +194,7 @@ module.exports = {
 
     async countCommentsByPostId(postId) {
         const statement = `
-        SELECT COUNT(*) as comments FROM post_comments
+        SELECT COUNT(*) as comments FROM postcomments
         WHERE postId = ?
       `;
         const [rows] = await db.execute(statement, [postId]);
@@ -176,35 +209,34 @@ module.exports = {
         await db.execute(statement, [postId]);
     },
 
-    async updateComment(commentId, commentPayload) {
+    async updateComment(post) {
+        console.log("post: ", post);
         const statement = ` 
-        UPDATE post_comments
-        SET comment = ?
+        UPDATE postcomments
+        SET comments = ?
         WHERE id = ?
       `;
-        await db.execute(statement, [commentPayload.comment, commentId]);
+        const [rows] = await db.execute(statement, [
+            post["comment"],
+            post["0"]["id"],
+        ]);
+        console.log(rows);
+        return rows;
     },
 
     async deleteComment(commentId) {
+        console.log("dbService: commentId: ", commentId);
         const statement = `
-        DELETE FROM post_comments
+        DELETE FROM postcomments
         WHERE id = ?
       `;
         await db.execute(statement, [commentId]);
     },
 
-    async getCommentById(commentId) {
-        const statement = `
-        SELECT * FROM post_comments
-        WHERE id = ?
-      `;
-        const [rows] = await db.execute(statement, [commentId]);
-        return rows[0];
-    },
-
+    // cambiar
     async savePhoto(photo) {
         const statement = `
-        INSERT INTO post_photos(id, postId, imageURL)
+        INSERT INTO postphotos(id, postId, imageURL)
         VALUES(?, ?, ?)
       `;
         await db.execute(statement, Object.values(photo));
@@ -241,8 +273,8 @@ module.exports = {
     async checkUserPermission(postId, userId) {
         const statement = `
         SELECT *
-        FROM posts
-        WHERE id = ? AND userId = ?
+        FROM postcomments
+        WHERE idPost = ? AND idUser = ?
       `;
         const [rows] = await db.execute(statement, [postId, userId]);
 

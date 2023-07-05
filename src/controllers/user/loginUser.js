@@ -19,18 +19,13 @@ async function loginUser(data) {
         throw invalidCredentials();
     }
 
-    const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [
+    const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [
         data.email,
     ]);
 
     if (rows.length === 0) {
         throw invalidCredentials();
     }
-
-    // if (!user.emailValidated) {
-    //     console.log("no validado");
-    //     throw errorService.emailNotValidated();
-    // }
 
     const passwordMatch = await validatePassword(
         data.password,
@@ -42,13 +37,6 @@ async function loginUser(data) {
     }
 
     const token = generateJWT(rows[0]);
-    // const secretKey = process.env.JWT_SECRET;
-
-    // const decodedToken = validateToken(token, secretKey);
-
-    // if (decodedToken === null) {
-    //     throw notAuthenticated();
-    // }
 
     return {
         success: true,
