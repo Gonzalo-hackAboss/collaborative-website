@@ -22,6 +22,34 @@ module.exports = {
         ]);
     },
 
+    async getUserById(userId) {
+        console.log("accediendo a la BBDD");
+        console.log(userId);
+        const statement = `
+      SELECT id, nameMember, biography, avatarURL, country, role
+      FROM users
+      WHERE id = ?`;
+        const [rows] = await db.execute(statement, [userId]);
+        console.log(rows);
+        return rows;
+    },
+
+    //EN DESARROLLO
+    async updateUser(edit) {
+        const statement = `
+        UPDATE users
+        SET biography = ?, avatarURL = ?, country = ?
+        WHERE id = ?
+      `;
+        const [rows] = await db.execute(statement, [
+            edit.biography ?? null,
+            edit.avatarURL ?? null,
+            edit.country ?? null,
+            edit.id,
+        ]);
+        return rows;
+    },
+
     // unsafe???
     async getUserByEmail(email) {
         const statement = `

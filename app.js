@@ -4,7 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const morgan = require("morgan");
-
+const cors = require("cors");
 const appRouter = require("./src/routes/appRouter.js");
 const sendError = require("./src/utils/sendError.js");
 const validateToken = require("./src/middlewares/validateToken.js");
@@ -17,6 +17,18 @@ app.use(fileUpload());
 app.use(morgan("dev"));
 app.use(validateToken);
 app.use(appRouter);
+
+app.use(
+    cors({
+        origin: [
+            "https://levelup.es",
+            "http://localhost:5500",
+            "http://localhost:5174",
+            "http://localhost:5173",
+            "http://localhost:3000",
+        ],
+    })
+);
 
 //middleware de error
 app.use((err, req, res, next) => {

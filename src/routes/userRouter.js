@@ -11,6 +11,8 @@ const authGuard = require("./../middlewares/authGuard.js");
 const handleAsyncError = require("../services/handleAsyncError.js");
 const validateBody = require("../middlewares/validateBody.js");
 const registerPayload = require("../validators/registerPayload.js");
+const { getUserById } = require("../services/dbService.js");
+const { controlPanel } = require("../controllers/user/controlPanel.js");
 const router = Router();
 
 router.get("/news", (req, res) => {
@@ -22,6 +24,24 @@ router.post("/users/register", json(), async (req, res) => {
     const result = await registerUser(req.body);
     res.json(result);
 });
+
+router.get("/users/:id", json(), async (req, res) => {
+    const user = await getUserById(req.params.id);
+    sendResponse(res, user, undefined, 201);
+});
+
+// EN DESARROLLO
+router.put(
+    "/users/:id/controlpanel",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        const userId = req.params.id;
+        const userInfo = req.body;
+        const info = await controlPanel(userId, userInfo);
+        sendResponse(res, info, undefined, 201);
+    })
+);
 
 // router.post("/users/register", json(), async (req, res) => {
 //     validateBody(registerPayload);
