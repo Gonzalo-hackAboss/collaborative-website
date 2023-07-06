@@ -175,6 +175,7 @@ module.exports = {
         return rows;
     },
 
+    // REVISAR PORQUE NO TIENE RETURN ????
     async saveComment(newComment) {
         const statement = `
         INSERT INTO postcomments(id, iDUser, idPost, comments)
@@ -209,6 +210,52 @@ module.exports = {
         } catch (err) {
             searchError(err);
         }
+    },
+
+    async checkVote(postId) {
+        console.log("esto se está ejecutando");
+        const statement = `
+      SELECT * FROM votes
+      WHERE idpost = ?
+      `;
+        const [rows] = await db.execute(statement, [postId]);
+        console.log("Esto es lo que devuelve la consulta de CheckVote: ", rows);
+        return rows;
+    },
+
+    async createVote(vote) {
+        const statement = `
+      INSERT INTO votes (id, idUser, idPost, votes)
+      VALUES (?, ?, ?, ?);
+      `;
+        const [rows] = await db.execute(statement, [
+            vote.id,
+            vote.idUser,
+            vote.idPost,
+            vote.userVote,
+        ]);
+        console.log(rows);
+        return rows;
+    },
+
+    async deleteVote(idPost, idUser) {
+        const statement = `
+      DELETE FROM votes 
+      WHERE idpost = ? AND iduser = ?;
+      `;
+
+        const [rows] = await db.execute(statement, [idPost, idUser]);
+        console.log("Rows DeleteVote: ", rows);
+        return rows;
+    },
+
+    async toggleVote(idPost, idUser, userVote) {
+        const statement = `
+      UPDATE votes
+      SET votes = ?
+      WHERE iduser = ? AND idpost = ?
+      `;
+        const [rows] = await db.execute(statement, [userVote, idUser, idPost]);
     },
 
     async countVotes(postId) {

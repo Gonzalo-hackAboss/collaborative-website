@@ -19,8 +19,13 @@ const lastPosts = require("../controllers/post/lastPost.js");
 const { searchByCategory } = require("../controllers/post/searchCategory.js");
 // const { viewPostDetails } = require("../controllers/post/viewPostDetails.js");
 const viewPostDetails = require("../controllers/post/viewPostDetails.js");
-const { updatePost, deletePost } = require("../services/dbService.js");
+const {
+    updatePost,
+    deletePost,
+    checkVote,
+} = require("../services/dbService.js");
 const viewUniqueComment = require("../controllers/post/viewUniqueComment.js");
+const toggleVote = require("../controllers/post/toggleVote.js");
 
 const router = Router();
 
@@ -167,11 +172,22 @@ router.delete(
  **** VOTOS  ***
  */
 
-router.post("/posts/:id/votes", async (req, res) => {
-    console.log("has votado - esto luego se elimina");
-    const { idPost } = req.params; // ID del post
-    const { userVote } = req.body; // Valor del voto (true o false)
-    const idUser = req.user.id; // ID del usuario autenticado
-});
+router.post(
+    "/posts/:id/votes",
+    authGuard,
+    json(),
+    handleAsyncError(async (req, res) => {
+        console.log("Se está ejecutando el voto...");
+        const idPost = req.params.id; // ID del post
+        console.log("idPost: ", idPost);
+        const idUser = req.currentUser.id;
+        console.log("idUser: ", idUser);
+        const userVote = req.body.vote;
+        console.log(userVote);
+        await toggleVote(idPost, idUser, userVote);
+
+        sendResponse(res, undefined, 200);
+    })
+);
 
 module.exports = router;

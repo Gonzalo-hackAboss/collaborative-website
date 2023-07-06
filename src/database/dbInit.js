@@ -63,7 +63,14 @@ async function createDatabaseTables(pool) {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS categories(
         id CHAR(36) PRIMARY KEY,
-        category ENUM('RPG', 'PS5', 'PS4', 'PS3', 'Retro', 'E3', 'Switch', 'DS', 'Xbox Series', 'Xbox One', 'Xbox 360'),
+        category ENUM('RPG', 'MMO', 'Mundo Abierto', 'Juegos De Mesa', 'Estrategia', 'Shooter', 'Single Player', 'Deportes', 'Plataformas', 'Peleas', 'Aventura Gráfica', 'Rol', 'Puzzle'),
+        description VARCHAR(50) NOT NULL
+    );`);
+
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS platforms(
+        id CHAR(36) PRIMARY KEY,
+        platform ENUM('PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PSOne', 'Xbox Series', 'Xbox One', 'Xbox360', 'Xbox Classic', 'Switch', 'Wii U', 'Wii', 'N64', 'SNES', 'NES', 'Otras'),
         description VARCHAR(50) NOT NULL
     );`);
 
